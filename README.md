@@ -2,4 +2,4 @@
 
 Testing Deployment of a tutorial app
 
-URL: (nikosavg.github.io)
+URL: [nikosavg.github.io]
