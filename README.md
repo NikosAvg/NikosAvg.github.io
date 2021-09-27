@@ -1,2 +1,2 @@
 # NikosAvg.github.io
-[Visit the site here](nikosAvg.github.io)
+[Visit the site here](nikosavg.github.io)
