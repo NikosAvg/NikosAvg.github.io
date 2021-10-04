@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: nikosavg.github.io
+Token: 1e250810471f88ab142c9a8554bb96915fedbeeed1000a3fd4487cc2dd493d45
