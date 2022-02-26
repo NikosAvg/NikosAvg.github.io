@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Nikos Avgoustis Blog</title>
+    <title>Nikos Avgoustis Personal Blog</title>
     <link>https://nikosavg.github.io/</link>
-    <description>Nikos Avgoustis Blog</description>
+    <description>Nikos Avgoustis Personal Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 26 Feb 2022 08:49:40 +0200</lastBuildDate>
@@ -12,13 +12,64 @@
     
     
     <item>
-      <title>Random Walk With Python</title>
+      <title>Portfolio</title>
+      <link>https://nikosavg.github.io/portfolio/</link>
+      <pubDate>Sat, 26 Feb 2022 09:22:16 +0200</pubDate>
+      
+      <guid>https://nikosavg.github.io/portfolio/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Random Walk in Python</title>
       <link>https://nikosavg.github.io/posts/randomwalkwithpython/</link>
       <pubDate>Sat, 26 Feb 2022 08:49:40 +0200</pubDate>
       
       <guid>https://nikosavg.github.io/posts/randomwalkwithpython/</guid>
-      <description>&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Cool code&amp;#39;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+      <description>&lt;p&gt;In mathematics a &lt;strong&gt;random walk&lt;/strong&gt; is a random process that describes a path that consists of a succession of random steps on some mathematical space.&lt;/p&gt;
+&lt;p&gt;The simplest example of a random walk is the random walk of the integer line, with starting point the number 0, and at each step moves +1 or -1 with equal probability.&lt;/p&gt;
+&lt;p&gt;The above example is an one-dimensional random walk and will be the first random walk that we will see in this post.&lt;/p&gt;
+&lt;h3 id=&#34;the-theory&#34; &gt;The theory
+&lt;span&gt;
+    &lt;a href=&#34;#the-theory&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;&lt;p&gt;To define this walk formally, take independent random variables
+Ζ&lt;!-- raw HTML omitted --&gt;0&lt;!-- raw HTML omitted --&gt;, Ζ&lt;!-- raw HTML omitted --&gt;1&lt;!-- raw HTML omitted --&gt;, Ζ&lt;!-- raw HTML omitted --&gt;2&lt;!-- raw HTML omitted --&gt; .. where each variable is either 1 or −1, with a 50% probability for either value and set S&lt;!-- raw HTML omitted --&gt;0&lt;!-- raw HTML omitted --&gt; = 0 and S&lt;!-- raw HTML omitted --&gt;n&lt;!-- raw HTML omitted --&gt; as the sum of all previous Ζ&lt;!-- raw HTML omitted --&gt;i&lt;!-- raw HTML omitted --&gt; till Ζ&lt;!-- raw HTML omitted --&gt;n&lt;!-- raw HTML omitted --&gt;.&lt;/p&gt;
+&lt;p&gt;The series {S&lt;!-- raw HTML omitted --&gt;n&lt;!-- raw HTML omitted --&gt;} is called the simple random walk on the integer line.&lt;/p&gt;
+&lt;h3 id=&#34;the-code&#34; &gt;The code
+&lt;span&gt;
+    &lt;a href=&#34;#the-code&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;&lt;p&gt;To generate this simple random walk in python we will use the &lt;a href=&#34;https://numpy.org/&#34;&gt;numpy&lt;/a&gt; library to generate the random numbers and the &lt;a href=&#34;https://matplotlib.org/&#34;&gt;matplotlib&lt;/a&gt; library to visualize them.
+To begin, first we create a file named random_walk.py and import the necessary libraries&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+    &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we create an empty list named random_walk which we will use to store each of our data points and initialize it at 0.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;    random_walk &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The next step is to choose the number of steps we want our walk to run for, in this example we choose 100, and generate that much random integers that are either 0 or 1 to simulate the 50% chance.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;    steps &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;
+    random_numbers &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,steps)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we are ready to create our Random walk, we will loop through our random number list and we check if the number at each time step is either 1 or 0.
+If the number is 0 we will add 1 tou our previous data point else if the number is 1 we will subtract 1 to our previous data point.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; r &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; random_numbers:
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; r &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+            step&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+            step&lt;span style=&#34;color:#f92672&#34;&gt;=-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+        random_walk&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(random_walk[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;step)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After all that we can visualize the walk using the matplotlib library as follows.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(random_walk)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Simple Random Walk&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Time steps&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Current Position&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;./static/images/random_walk.png&#34; alt=&#34;&#34;&gt;
+The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/random_walk.py&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
+</description>
     </item>
     
   </channel>
