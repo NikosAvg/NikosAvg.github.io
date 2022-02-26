@@ -207,29 +207,29 @@ if (!doNotTrack) {
 </span>
 </h3><p>To generate this simple random walk in python we will use the <a href="https://numpy.org/">numpy</a> library to generate the random numbers and the <a href="https://matplotlib.org/">matplotlib</a> library to visualize them.
 To begin, first we create a file named random_walk.py and import the necessary libraries</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    <span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
-    <span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+<span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
 </code></pre></div><p>Then we create an empty list named random_walk which we will use to store each of our data points and initialize it at 0.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    random_walk <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>]
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">random_walk <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>]
 </code></pre></div><p>The next step is to choose the number of steps we want our walk to run for, in this example we choose 100, and generate that much random integers that are either 0 or 1 to simulate the 50% chance.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    steps <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
-    random_numbers <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">2</span>,steps)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">steps <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+random_numbers <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">2</span>,steps)
 </code></pre></div><p>Now we are ready to create our Random walk, we will loop through our random number list and we check if the number at each time step is either 1 or 0.
 If the number is 0 we will add 1 tou our previous data point else if the number is 1 we will subtract 1 to our previous data point.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">    <span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> random_numbers:
-        <span style="color:#66d9ef">if</span> r <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
-            step<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
-        <span style="color:#66d9ef">else</span>:
-            step<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>
-        random_walk<span style="color:#f92672">.</span>append(random_walk[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">+</span>step)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> random_numbers:
+    <span style="color:#66d9ef">if</span> r <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+        step<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+    <span style="color:#66d9ef">else</span>:
+        step<span style="color:#f92672">=-</span><span style="color:#ae81ff">1</span>
+    random_walk<span style="color:#f92672">.</span>append(random_walk[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">+</span>step)
 </code></pre></div><p>After all that we can visualize the walk using the matplotlib library as follows.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(random_walk)
 plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Simple Random Walk&#34;</span>)
 plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#34;Time steps&#34;</span>)
 plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;Current Position&#34;</span>)
 plt<span style="color:#f92672">.</span>show()
-</code></pre></div><p><img src="images/random_walk.png" alt="">
-The full code for this article can be found at <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/random_walk.py">github</a></p>
+</code></pre></div><p><img src="./images/random_walk.png" alt="Random Walk Image 1"></p>
+<p>The full code for this article can be found at <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/random_walk.py">github</a></p>
 
         </div>
         
