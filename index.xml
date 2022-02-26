@@ -67,7 +67,10 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Time steps&amp;#34;&lt;/span&gt;)
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Current Position&amp;#34;&lt;/span&gt;)
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;./images/random_walk.png&#34; alt=&#34;Random Walk Image 1&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/random_walk.png&#34; alt=&#34;Random Walk Image 1&#34;&gt;
+&lt;img src=&#34;https://nikosavg.github.io/images/random_walk2.png&#34; alt=&#34;Random Walk Image 2&#34;&gt;
+&lt;img src=&#34;https://nikosavg.github.io/images/random_walk3.png&#34; alt=&#34;Random Walk Image 3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;As we can see after running the code 3 times, we get different random walks that&amp;rsquo;s to be expected due the nature of the process.&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/random_walk.py&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
