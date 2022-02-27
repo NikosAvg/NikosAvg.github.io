@@ -6,10 +6,66 @@
     <description>Nikos Avgoustis (Random Walk)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 26 Feb 2022 08:49:40 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 27 Feb 2022 13:03:27 +0200</lastBuildDate>
     
     <atom:link href="https://nikosavg.github.io/tags/random-walk/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2D Random Walk With Python</title>
+      <link>https://nikosavg.github.io/posts/2drandomwalkwithpython/</link>
+      <pubDate>Sun, 27 Feb 2022 13:03:27 +0200</pubDate>
+      
+      <guid>https://nikosavg.github.io/posts/2drandomwalkwithpython/</guid>
+      <description>&lt;p&gt;As a continuation of the previous post on &lt;a href=&#34;https://nikosavg.github.io/posts/randomwalkwithpython/&#34;&gt;random walks&lt;/a&gt;, we will see how we can generate two dimensional random walks in python.&lt;/p&gt;
+&lt;h3 id=&#34;the-theory&#34; &gt;The theory.
+&lt;span&gt;
+    &lt;a href=&#34;#the-theory&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;&lt;p&gt;The procedure to generate a two dimendional random walk will be similar to the one for the simple one dimensional random walk with few adjustments. In the one dimensional random walk we had only 2 possible outcomes, with equal probabilities, we could either go forward or backwards. In the two dimensional walk, we now have 4 possible outcomes 2 for each dimension.&lt;/p&gt;
+&lt;p&gt;So we now need to consider 4 possibilities, each with 25% chance. Those are a step forward in the X-axis, a step backwards in the X-axis, a step upwards in the Y-axis and a step downwards in the Y-axis.
+The formal definition of this 2D-random walk follows the same logic as the 1D-random walk but this time we have pair of points instead of a single point.&lt;/p&gt;
+&lt;h3 id=&#34;the-code&#34; &gt;The code.
+&lt;span&gt;
+    &lt;a href=&#34;#the-code&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h3&gt;&lt;p&gt;To begin, as before, we create a file named 2D_random_walk.py and import the necessary libraries.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we create an two empty lists named x and y to represent our two dimensions, which we will use to store each of our data points and initialize it at 0.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;x&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+y&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The next step is to choose the number of steps we want our walk to run for, in this example we choose 1000, and generate that much random integers that are either 0, 1, 2 or 3 to simulate the 25% chance.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;steps &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+probability &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;,steps)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we are ready to create our Random walk, we will loop through our random number list and we check if the number at each time step is one of our 4 possible outcomes. If the number is 0 we will add 1 to our previous x data point else if the number is 1 we will subtract 1 from our previous x data point, if the number is 2 we add 1 to our previous y data point and if is 3 we subtract 1 from our previous y data point. Each time we don&amp;rsquo;t add or subtract from one of our x or y data point we append to the list the previous one to indicate that there was no change.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; p &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; probability:
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; p &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+        x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+        y&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; p &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:
+        x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+        y&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; p &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;:
+        y&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+        x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; p &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;:
+        y&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+        x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And finally we can visualize our walk by plotting the pairs with matplotlib.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(y,x)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;2D Random Walk&amp;#39;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;X-Axis Coordinate&amp;#39;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Y-Axis Coordinate&amp;#39;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/2Drandom_walk.png&#34; alt=&#34;2DRandom Walk Image 1&#34;&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Random Walk in Python</title>
@@ -29,7 +85,7 @@
 &lt;/h3&gt;&lt;p&gt;To define this walk formally, take independent random variables
 Ζ&lt;!-- raw HTML omitted --&gt;0&lt;!-- raw HTML omitted --&gt;, Ζ&lt;!-- raw HTML omitted --&gt;1&lt;!-- raw HTML omitted --&gt;, Ζ&lt;!-- raw HTML omitted --&gt;2&lt;!-- raw HTML omitted --&gt; .. where each variable is either 1 or −1, with a 50% probability for either value and set S&lt;!-- raw HTML omitted --&gt;0&lt;!-- raw HTML omitted --&gt; = 0 and S&lt;!-- raw HTML omitted --&gt;n&lt;!-- raw HTML omitted --&gt; as the sum of all previous Ζ&lt;!-- raw HTML omitted --&gt;i&lt;!-- raw HTML omitted --&gt; till Ζ&lt;!-- raw HTML omitted --&gt;n&lt;!-- raw HTML omitted --&gt;.&lt;/p&gt;
 &lt;p&gt;The series {S&lt;!-- raw HTML omitted --&gt;n&lt;!-- raw HTML omitted --&gt;} is called the simple random walk on the integer line.&lt;/p&gt;
-&lt;h3 id=&#34;the-code&#34; &gt;The code
+&lt;h3 id=&#34;the-code&#34; &gt;The code.
 &lt;span&gt;
     &lt;a href=&#34;#the-code&#34;&gt;
         &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
