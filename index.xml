@@ -70,15 +70,6 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
     </item>
     
     <item>
-      <title>Portfolio</title>
-      <link>https://nikosavg.github.io/portfolio/</link>
-      <pubDate>Sat, 26 Feb 2022 09:22:16 +0200</pubDate>
-      
-      <guid>https://nikosavg.github.io/portfolio/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Random Walk in Python</title>
       <link>https://nikosavg.github.io/posts/randomwalkwithpython/</link>
       <pubDate>Sat, 26 Feb 2022 08:49:40 +0200</pubDate>
@@ -131,6 +122,82 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
 &lt;p&gt;As we can see after running the code 3 times, we get different random walks that&amp;rsquo;s to be expected due the nature of the process.&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/random_walk.py&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
 </description>
+    </item>
+    
+    <item>
+      <title>Nikos Avgoustis</title>
+      <link>https://nikosavg.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://nikosavg.github.io/about/</guid>
+      <description>&lt;p&gt;I&amp;rsquo;m a Mathematician / Computer Scientist interested in educating people about new technologies and methodologies in the field of machine learning and forecasting. I&amp;rsquo;m currently working as a teacher at &lt;a href=&#34;https://alfaedu.gr/&#34;&gt;alfaedu&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;work-experience&#34; &gt;Work Experience
+&lt;span&gt;
+    &lt;a href=&#34;#work-experience&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://alfaedu.gr/&#34;&gt;alfaedu&lt;/a&gt; Teacher 2020 - Present&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://tekmon.com/&#34;&gt;Tekmon Geomatics&lt;/a&gt; Full stack Web Developer (Internship) 2018&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;other-projects&#34; &gt;Other Projects
+&lt;span&gt;
+    &lt;a href=&#34;#other-projects&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Creating a &lt;a href=&#34;https://medicaldss.herokuapp.com/&#34;&gt;Medical Decision Support&lt;/a&gt; web application Predicting Lymphoma in Primary Sjogren’s Syndrome Patients.&lt;/li&gt;
+&lt;li&gt;Creating the website for &lt;a href=&#34;https://alfaedu.gr/&#34;&gt;alfaedu&lt;/a&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;education&#34; &gt;Education
+&lt;span&gt;
+    &lt;a href=&#34;#education&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Masters in Informatics from &lt;a href=&#34;https://di.ionio.gr/en/&#34;&gt;Ionian University&lt;/a&gt; October 2019 - September 2021&lt;/li&gt;
+&lt;li&gt;Bachelors in Mathematics from &lt;a href=&#34;https://math.uoi.gr/index.php/en/&#34;&gt;University of Ioannina&lt;/a&gt; October 2013 - September 2018&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;publications&#34; &gt;Publications
+&lt;span&gt;
+    &lt;a href=&#34;#publications&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://link.springer.com/chapter/10.1007/978-3-030-49190-1_16&#34;&gt;Fake News Detection Regarding the Hong Kong
+Events from Tweets (May 2020) In book: Artificial
+Intelligence Applications and Innovations. AIAI 2020
+IFIP WG 12.5 International Workshops Publisher:
+Springer, Cham&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://link.springer.com/chapter/10.1007%2F978-3-030-78775-2_2&#34;&gt;Avgoustis N., Exarchos T. (2021) A DSS for Predicting Lymphoma in Primary Sjogren’s Syndrome Patients. In: Vlamos P. (eds) GeNeDis 2020. Advances in Experimental Medicine and Biology, vol 1338. Springer, Cham. https://doi.org/10.1007/978-3-030-78775-2_2&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://link.springer.com/chapter/10.1007%2F978-3-030-78775-2_11&#34;&gt;Angelis I. et al. (2021) Mobile Application for Monitoring and Preventing Cognitive Decline Through Lifestyle Intervention. In: Vlamos P. (eds) GeNeDis 2020. Advances in Experimental Medicine and Biology, vol 1338. Springer, Cham. https://doi.org/10.1007/978-3-030-78775-2_11&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Portfolio</title>
+      <link>https://nikosavg.github.io/portfolio/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://nikosavg.github.io/portfolio/</guid>
+      <description>&lt;h1 id=&#34;projects-will-be-added-sortly&#34; &gt;Projects will be added sortly.
+&lt;span&gt;
+    &lt;a href=&#34;#projects-will-be-added-sortly&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h1&gt;</description>
     </item>
     
   </channel>
