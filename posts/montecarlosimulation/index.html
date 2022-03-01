@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+
+<html lang="en-us" data-theme="">
+<head>
+    
+        
+<meta charset="utf-8">
+<meta name="HandheldFriendly" content="True">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer-when-downgrade">
+
+<title>Monte Carlo simulations with python - Nikos Avgoustis</title>
+
+<meta name="description" content="A Basic introduction to Monte Carlo simulations with python">
+
+
+
+
+
+<link rel="icon" type="image/x-icon" href="https://nikosavg.github.io/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="https://nikosavg.github.io/favicon.png">
+
+
+<style>
+  body {
+    visibility: hidden;
+    opacity: 0;
+  }
+</style>
+
+<noscript>
+  <style>
+    body {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</noscript>
+
+
+
+    
+
+
+
+
+
+    
+    
+        
+    
+    
+
+    
+        <link rel="stylesheet" href="https://nikosavg.github.io/css/style.min.e4dd69a921886f06d1a0e2bf835aa4fdced2d03b6f83804e6ae146caac8882bb.css" integrity="sha256-5N1pqSGIbwbRoOK/g1qk/c7S0Dtvg4BOauFGyqyIgrs=">
+    
+
+
+
+
+
+    
+
+    
+
+
+
+
+
+    
+    
+        
+    
+    
+
+    
+        <script src="https://nikosavg.github.io/js/script.min.510c781c39dbb21b4c76d85c82e2bdf4689220adbb7cd61e49e9d293e442fb42.js" type="text/javascript" charset="utf-8" integrity="sha256-UQx4HDnbshtMdthcguK99GiSIK27fNYeSenSk&#43;RC&#43;0I="></script>
+    
+
+
+
+
+
+
+
+<meta property="og:title" content="Monte Carlo simulations with python" />
+<meta property="og:description" content="A Basic introduction to Monte Carlo simulations with python" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nikosavg.github.io/posts/montecarlosimulation/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-01T11:09:57+02:00" />
+<meta property="article:modified_time" content="2022-03-01T11:09:57+02:00" />
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Monte Carlo simulations with python"/>
+<meta name="twitter:description" content="A Basic introduction to Monte Carlo simulations with python"/>
+
+
+
+
+
+
+
+
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGMV3N6C4M"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-JGMV3N6C4M', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+
+
+    
+</head>
+<body>
+    <a class="skip-main" href="#main">Skip to main content</a>
+    <div class="container">
+        <header class="common-header"> 
+            
+                <div class="header-top">
+    <h1 class="site-title">
+    <a href="/">Nikos Avgoustis</a>
+</h1>
+    <ul class="social-icons">
+
+
+    
+        
+        
+        <li>
+            <a href="https://github.com/NikosAvg" title="Github" rel="me">
+            <span class="inline-svg" >
+
+
+
+
+    
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+</span>
+
+            </a>
+        </li>
+    
+
+
+
+
+</ul>
+</div>
+
+    <nav>
+        
+        
+        <a class="" href="https://nikosavg.github.io/about/" title="">About</a>
+        
+        <a class="" href="https://nikosavg.github.io/posts/" title="">Posts</a>
+        
+        <a class="" href="https://nikosavg.github.io/portfolio/" title="">Portfolio</a>
+        
+    </nav>
+
+
+
+
+            
+        </header>
+        <main id="main" tabindex="-1"> 
+            
+    
+
+    <article class="post h-entry">
+        <div class="post-header">
+            <header>
+                <h1 class="p-name post-title">Monte Carlo simulations with python</h1>
+
+                
+            </header>
+        </div>
+        <div class="content e-content">
+            <h2 id="what-is-a-monte-carlo-simulation" >What is a Monte Carlo Simulation?
+<span>
+    <a href="#what-is-a-monte-carlo-simulation">
+        <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
+    </a>
+</span>
+</h2><p>Monte Carlo simulation is a technique used to understand the impact of risk and uncertainty in financial, project management, cost, and other forecasting models. A Monte Carlo simulator helps one visualize most or all of the potential outcomes to have a better idea regarding the risk of a decision.</p>
+<h2 id="a-simple-dice-game" >A simple dice game
+<span>
+    <a href="#a-simple-dice-game">
+        <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
+    </a>
+</span>
+</h2><p>Lets consider a simple game of dice, each time we roll the dice we bet a certain amount on a certain outcome, if we are correct we win that amount else we lose it.</p>
+<p>Lets say each time we bet 1$, our expected profit is 1*(1/6) - 1*(5/6) = -4/6 = -67%.
+So as we see it&rsquo;s not wise play this game, but for the sake of this article we will.</p>
+<p>So if we start the game with an initial amount of 10000$, decide to roll the dice 100 times and each roll we bet 100$ at the end of the game we expect to lose around on average 67% of our money, which means we should have around 3300$.</p>
+<p>Let&rsquo;s run a Monte Carlo simulation to run different scenarios and visualize our different outcomes.</p>
+<h2 id="the-code" >The code
+<span>
+    <a href="#the-code">
+        <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
+    </a>
+</span>
+</h2><p>As always we first need to import any libraries we plan to use. For this example we only need matplotlib and numpy.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+<span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+plt<span style="color:#f92672">.</span>style<span style="color:#f92672">.</span>use(<span style="color:#e6db74">&#39;classic&#39;</span>)
+</code></pre></div><p>Then we will create some functions to help us with the simulation. We need three functions:</p>
+<ol>
+<li>A function to simulate a dice roll.</li>
+<li>A function to simulate our player.</li>
+<li>And a function to run the simulation.</li>
+</ol>
+<p>For the dice roll function we can use the one we wrote at <a href="https://nikosavg.github.io/posts/dicesimulation/">Dice Simulation in Python</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">diceRoll</span>():
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">7</span>)
+</code></pre></div><p>For the player function, we will pass as parameters our bet and the result of our dice roll function and if the two match we will return True, else we&rsquo;ll return False.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">player</span>(bet,dice_result):
+    <span style="color:#66d9ef">if</span> bet <span style="color:#f92672">==</span> dice_result:
+        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">True</span>
+    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">False</span>
+</code></pre></div><p>And finally for the simulation function, we will pass as parameters our initial position (10.000$), the number of desired simulations (100), our bet (in the dice example it really doesn&rsquo;t matter because all outcomes have the same probability), the amount we want to bet at each roll (100$) and the number of bets we want to play for.
+Then we will loop the number of simulations we passed and at each simulation we will play for the desired number of bets and record our positions after each bet.
+The function will return a timeseries for each time we run our simulation. Then we can plot them to visualize the results and perform some basic statistics to validate the theoretical results.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">Simulation</span>(initial_position,num_simulations,bet_number,bet_amount,num_of_bets):
+    results <span style="color:#f92672">=</span> []
+    <span style="color:#66d9ef">for</span> n <span style="color:#f92672">in</span> range(num_simulations):
+        y <span style="color:#f92672">=</span> [initial_position]
+        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(num_of_bets):
+            dice <span style="color:#f92672">=</span> diceRoll()
+            <span style="color:#66d9ef">if</span> player(diceRoll(),bet):
+                y<span style="color:#f92672">.</span>append(y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">+</span>bet_amount)
+            <span style="color:#66d9ef">else</span>:
+                y<span style="color:#f92672">.</span>append(y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">-</span>bet_amount)
+        results<span style="color:#f92672">.</span>append(y)
+    <span style="color:#66d9ef">return</span> results
+</code></pre></div><p>We are now ready to initialize our parameters for the simulation and run it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">num_simulations <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+initial_position <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>
+num_of_bets <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+bet_number <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>
+bet_amount <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+
+results <span style="color:#f92672">=</span> Simulation(initial_position,num_simulations,bet_number,bet_amount,num_of_bets)
+</code></pre></div><p>The variable results holds all our timeserieses. By plotting them we can see that our theoretical results match the results of our simulation.
+As we see each simulation started at 10.000$ and the average amount we have at the end of all the simulations is 3.314,8$ which is around 33.1%.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> list(range(num_of_bets<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>))
+end_value <span style="color:#f92672">=</span> [y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> results]
+mean_end_value <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(end_value)
+<span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> results:
+    plt<span style="color:#f92672">.</span>plot(x,y)
+    
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#34;Number of bets&#34;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;Position&#34;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Monte Carlo Simulation of </span><span style="color:#e6db74">{}</span><span style="color:#e6db74"> dice rolls </span><span style="color:#ae81ff">\n</span><span style="color:#e6db74"> (Mean End Amount = </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">)&#34;</span><span style="color:#f92672">.</span>format(num_of_bets,mean_end_value))
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img src="/images/montecarlo_bets_100.png" alt="Monte Carlo Image"></p>
+<p>Another way to visualize our results is via a histogram.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>hist(end_value,density<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#34;Final amounts&#34;</span>)
+plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;Probability&#34;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Histogram of our Final amounts&#34;</span>)
+plt<span style="color:#f92672">.</span>show()
+</code></pre></div><p><img src="/images/montecarlohist.png" alt="Monte Carlo Histogram"></p>
+<p>Again, as we see in the histogram, our most common outcome is the 33% loss.</p>
+<p>The full code for this article can be found at <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/montecarlodice.py">github</a>.</p>
+
+        </div>
+        
+
+    
+
+
+<div class="post-info">
+    
+        <div class="post-date dt-published">01-03-2022</div>
+    
+
+    <a class="post-hidden-url u-url" href="https://nikosavg.github.io/posts/montecarlosimulation/">https://nikosavg.github.io/posts/montecarlosimulation/</a>
+    <a href="https://nikosavg.github.io/" class="p-name p-author post-hidden-author h-card" rel="me">Nikos Avgoustis</a>
+
+
+    <div class="post-taxonomies">
+        
+            
+                <ul class="post-tags">
+                    
+                        
+                        <li><a href="https://nikosavg.github.io/tags/montecarlo/">#MonteCarlo</a></li>
+                    
+                        
+                        <li><a href="https://nikosavg.github.io/tags/python/">#Python</a></li>
+                    
+                        
+                        <li><a href="https://nikosavg.github.io/tags/simulation/">#Simulation</a></li>
+                    
+                        
+                        <li><a href="https://nikosavg.github.io/tags/probability/">#Probability</a></li>
+                    
+                        
+                        <li><a href="https://nikosavg.github.io/tags/statistics/">#Statistics</a></li>
+                    
+                </ul>
+        
+    </div>
+</div>
+
+    </article>
+
+    
+        
+        
+            <h3 class="read-next-title">Read next</h3>
+            <ul class="read-next-posts">
+                
+                <li><a href="/posts/dicesimulation/">Dice Simulation in Python</a></li>
+                
+                <li><a href="/posts/2drandomwalkwithpython/">2D Random Walk With Python</a></li>
+                
+                <li><a href="/posts/randomwalkwithpython/">Random Walk in Python</a></li>
+                
+            </ul>
+        
+    
+
+    
+        
+    <div class="pagination post-pagination">
+        <div class="left pagination-item disabled">
+            
+        </div>
+        <div class="right pagination-item ">
+            
+                <a href="/posts/dicesimulation/">Dice Simulation in Python</a>
+            
+        </div>
+    </div>
+
+
+
+
+    
+
+    
+
+    
+
+    
+
+
+        </main>
+        
+            <footer class="common-footer">
+    
+    
+
+    <div class="common-footer-bottom">
+        
+        <div class="copyright">
+            <p>© Nikos Avgoustis, 2022<br>
+            Powered by <a target="_blank" rel="noopener noreferrer" href="https://gohugo.io/">Hugo</a>, theme <a target="_blank" rel="noopener noreferrer" href="https://github.com/mitrichius/hugo-theme-anubis">Anubis</a>.<br>
+            
+            </p>  
+        </div> 
+
+        
+
+    
+
+
+
+
+<script>
+const STORAGE_KEY = 'user-color-scheme'
+const defaultTheme = "light-without-switcher"
+
+let currentTheme
+let switchButton
+let autoDefinedScheme = window.matchMedia('(prefers-color-scheme: dark)')
+
+const autoChangeScheme = e => {
+    currentTheme = e.matches ? 'dark' : 'light'
+    document.documentElement.setAttribute('data-theme', currentTheme)
+    changeButtonText()
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    switchButton = document.querySelector('.theme-switcher')
+    currentTheme = detectCurrentScheme()
+    if (currentTheme == 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark')
+    }
+    if (currentTheme == 'auto') {
+        autoChangeScheme(autoDefinedScheme);
+        autoDefinedScheme.addListener(autoChangeScheme);
+    }
+
+    if (switchButton) {
+        changeButtonText()
+        switchButton.addEventListener('click', switchTheme, false)
+    }
+  
+    showContent()
+})
+
+function detectCurrentScheme() {
+    if (localStorage.getItem(STORAGE_KEY)) {
+        return localStorage.getItem(STORAGE_KEY)
+    } 
+    if (defaultTheme) {
+        return defaultTheme
+    } 
+    if (!window.matchMedia) {
+        return 'light'
+    } 
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark'
+    }
+    return 'light'
+}
+
+function changeButtonText(switchButton)
+{   
+    if (switchButton) {
+        switchButton.textContent = currentTheme == 'dark' ?  "Light theme" : "Dark theme"
+    }
+}
+
+function switchTheme(e) {
+    if (currentTheme == 'dark') {
+        localStorage.setItem(STORAGE_KEY, 'light')
+        document.documentElement.setAttribute('data-theme', 'light')
+        currentTheme = 'light'
+    } else {
+        localStorage.setItem(STORAGE_KEY, 'dark')
+        document.documentElement.setAttribute('data-theme', 'dark')
+        currentTheme = 'dark'
+    }
+    changeButtonText()
+}
+
+function showContent() {
+    document.body.style.visibility = 'visible';
+    document.body.style.opacity = 1;
+}
+</script>   
+    </div>
+
+    <p class="h-card vcard">
+
+    <a href=https://nikosavg.github.io/ class="p-name u-url url fn" rel="me">Nikos Avgoustis</a> 
+
+    
+
+    
+</p> 
+</footer>
+
+        
+    </div>
+</body>
+</html>
