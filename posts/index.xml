@@ -6,10 +6,132 @@
     <description>Nikos Avgoustis (Posts)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Mar 2022 11:09:57 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 02 Mar 2022 07:42:45 +0200</lastBuildDate>
     
     <atom:link href="https://nikosavg.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Monte Carlo Integration in Python</title>
+      <link>https://nikosavg.github.io/posts/montecarlointegration/</link>
+      <pubDate>Wed, 02 Mar 2022 07:42:45 +0200</pubDate>
+      
+      <guid>https://nikosavg.github.io/posts/montecarlointegration/</guid>
+      <description>&lt;h2 id=&#34;whats-is-monte-carlo-integration&#34; &gt;Whats is Monte Carlo integration?
+&lt;span&gt;
+    &lt;a href=&#34;#whats-is-monte-carlo-integration&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;In mathematics, Monte Carlo integration is a technique for numerical integration using random numbers. It is a particular Monte Carlo method that numerically computes a definite integral. While other algorithms usually evaluate the integrand at a regular grid, Monte Carlo randomly chooses points at which the integrand is evaluated. This method is particularly useful for higher-dimensional integrals.&lt;/p&gt;
+&lt;p&gt;So basically to calculate the integral numerically we sample enough random points from our desired interval (a,b), calculate the function at those points take the average and multiply it by the length of the interval (b-a).&lt;/p&gt;
+&lt;p&gt;To understand this method of numerical integration better we will apply it on 2 different functions one which is one-dimensional (f(x) = sin(x)) and one that is two-dimensional (f(x,y) = cos(x)*exp(y)).&lt;/p&gt;
+&lt;h2 id=&#34;the-code&#34; &gt;The code
+&lt;span&gt;
+    &lt;a href=&#34;#the-code&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;As usual we first import all our libraries.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; mpl_toolkits.mplot3d &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Axes3D
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;classic&amp;#34;&lt;/span&gt;)
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we have to define any function we want to use.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;func&lt;/span&gt;(x):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(x)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;func2d&lt;/span&gt;(x,y):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(x)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exp(y)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And initialize the number of simulations we want to run as well as the number of random points we want to draw for our function evaluations.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;sampling_num &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;
+num_sim &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Before we perform any calculation, we plot our functions in the desired interval, to get a basic idea of what we will be calculating.&lt;/p&gt;
+&lt;p&gt;Our first function is the function f(x) = sin(x) in the interval [0,π].&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;a&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+b&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi
+x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(a,b,sampling_num)
+y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sin(x)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sin(x)&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sin(x)&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x,y)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sinx.png&#34; alt=&#34;Sinx plot&#34;&gt;&lt;/p&gt;
+&lt;p&gt;And our 2D function is f(x,y) = cos(x)*exp(y) in [0,π/2]x[0,1].&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;x_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+x_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+y_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; 
+y_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(x_min, x_max, sampling_num)
+y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(y_min,y_max,sampling_num)
+X, Y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;meshgrid(x, y)
+func &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; func2d(X,Y)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;fig &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure()
+ax &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Axes3D(fig)
+ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot_surface(X, Y, func)
+ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x&amp;#39;&lt;/span&gt;)
+ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;)
+ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_zlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Cos(x)*Exp(y)&amp;#39;&lt;/span&gt;)
+ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;view_init(&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;) 
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/func2d.png&#34; alt=&#34;2d function plot&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/contourfunc2d.png&#34; alt=&#34;2d function contour plot&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Then we have to define the functions that will perform the integration, for demonstration purposes we define 2 different functions, one for the 1D case and one for the 2D.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MonteCarloIntegral&lt;/span&gt;(function,a,b,sampling_num):
+    rest &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(sampling_num):
+        rest&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(function(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(a,b)))
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; rest
+    
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MonteCarlo2DIntegral&lt;/span&gt;(function,x_min,x_max,y_min,y_max,sampling_num):
+    rest &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(sampling_num):
+        rest&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(function(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(x_min,x_max),np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(y_min,y_max)))
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; rest
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we perform the numerical integration for the first function.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;actual_val &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+err &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_sim):
+    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MonteCarloIntegral(sin,b,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,sampling_num)
+    integral &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (b&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;a)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(r)
+    results&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral)
+    err&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;actual_val)
+print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Value Calculated = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(results)))
+print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mean error = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(err)))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And plot the results in a histogram.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Distribution of Areas Calculated&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Areas&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of Times Calculated&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sinx_hist.png&#34; alt=&#34;Histogram of the estimation of sinx integral&#34;&gt;&lt;/p&gt;
+&lt;p&gt;As we can see the analytical solution for the integral is 2 and our numerical solution 2.26, which gives us an error of 0.26. Which means we overestimated by 0.26.&lt;/p&gt;
+&lt;p&gt;Then we proceed to our 2D function and perform a similar procedure.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;actual_value2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.71828&lt;/span&gt;
+results2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+err2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_sim):
+    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MonteCarlo2DIntegral(func2d,x_min,x_max,y_min,y_max,sampling_num)
+    integral &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (x_max&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;x_min)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;(y_max&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;y_min)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(r)
+    results2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral)
+    err2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;actual_value2)
+print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Value Calculated = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(results2)))
+print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mean error = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(err2)))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And we also plot the results in a histogram.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results2)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Distribution of Areas Calculated&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Areas&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of Times Calculated&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/func2d_hist.png&#34; alt=&#34;Histogram of the estimation of 2d integral&#34;&gt;&lt;/p&gt;
+&lt;p&gt;As we can see the analytical solution for the integral is 1.71828 and our numerical solution 1.7177, which gives us an error of -0.00058 . Which means we underestimated by 0.00058.&lt;/p&gt;
+&lt;p&gt;So as we can see from our results this method works better on higher-dimensional integrals, the theory suggested.&lt;/p&gt;
+&lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/montecarintegration.py&#34;&gt;github&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Monte Carlo simulations with Python</title>
