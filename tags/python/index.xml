@@ -52,7 +52,7 @@ num_sim &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;a&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
 b&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi
 x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(a,b,sampling_num)
-y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sin(x)
+y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; func(x)
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sin(x)&amp;#34;&lt;/span&gt;)
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x&amp;#34;&lt;/span&gt;)
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sin(x)&amp;#34;&lt;/span&gt;)
@@ -76,7 +76,9 @@ ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span st
 ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_zlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Cos(x)*Exp(y)&amp;#39;&lt;/span&gt;)
 ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;view_init(&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;) 
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/func2d.png&#34; alt=&#34;2d function plot&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To visualize our 2D function there are 2 ways. The classical 3D surface plot with axes (x,y,f(x,y)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/func2d.png&#34; alt=&#34;2d function plot&#34;&gt;&lt;/p&gt;
+&lt;p&gt;And the &lt;a href=&#34;https://en.wikipedia.org/wiki/Contour_line&#34;&gt;contour plot&lt;/a&gt;, which is a graphical technique for representing a 3-dimensional surface by plotting constant z slices, called contours, on a 2-dimensional format.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/contourfunc2d.png&#34; alt=&#34;2d function contour plot&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Then we have to define the functions that will perform the integration, for demonstration purposes we define 2 different functions, one for the 1D case and one for the 2D.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MonteCarloIntegral&lt;/span&gt;(function,a,b,sampling_num):
