@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>LinearRegression on Nikos Avgoustis</title>
+    <link>https://nikosavg.github.io/tags/linearregression/</link>
+    <description>Nikos Avgoustis (LinearRegression)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Mar 2022 07:57:14 +0200</lastBuildDate>
+    
+    <atom:link href="https://nikosavg.github.io/tags/linearregression/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Linear Regression from scratch in Python.</title>
+      <link>https://nikosavg.github.io/posts/linearregression/</link>
+      <pubDate>Thu, 03 Mar 2022 07:57:14 +0200</pubDate>
+      
+      <guid>https://nikosavg.github.io/posts/linearregression/</guid>
+      <description>&lt;h2 id=&#34;whats-linear-regression&#34; &gt;What&amp;rsquo;s Linear Regression?
+&lt;span&gt;
+    &lt;a href=&#34;#whats-linear-regression&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;Linear regression is a linear model, e.g. a model that assumes a linear relationship between the input variables (x) and the single output variable (y). More specifically, that y can be calculated from a linear combination of the input variables (x).&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s consider the model function&lt;/p&gt;
+&lt;p&gt;y = a + b*x&lt;/p&gt;
+&lt;p&gt;which describes a line with slope b and y-intercept a. In general such a relationship may not hold exactly for the largely unobserved population of values of the independent and dependent variables; we call the unobserved deviations from the above equation the errors. Suppose we observe n data pairs and call them {(x&lt;sub&gt;i&lt;/sub&gt;, y&lt;sub&gt;i&lt;/sub&gt;), i = 1, &amp;hellip;, n}. We can describe the underlying relationship between yi and xi involving this error term ε&lt;sub&gt;i&lt;/sub&gt; by&lt;/p&gt;
+&lt;p&gt;y&lt;sub&gt;i&lt;/sub&gt; = a + b * x&lt;sub&gt;i&lt;/sub&gt; + ε&lt;sub&gt;i&lt;/sub&gt;.
+This relationship between the true (but unobserved) underlying parameters a and b and the data points is called a linear regression model.&lt;/p&gt;
+&lt;p&gt;The goal is to find estimated values for the parameters a and b which would provide the &amp;ldquo;best&amp;rdquo; fit in some sense for the data points.
+The &amp;ldquo;best&amp;rdquo; fit will be understood as in the least-squares approach: a line that minimizes the sum of squared residuals. For a better understanding of the theory behind the model you can check &lt;a href=&#34;https://www.mit.edu/~6.s085/notes/lecture3.pdf&#34;&gt;here&lt;/a&gt; as we won&amp;rsquo;t get much into it here.&lt;/p&gt;
+&lt;p&gt;The best estimate for the a parameter is calculated by:&lt;/p&gt;
+&lt;p&gt;a = (&lt;span style=&#34;text-decoration:overline&#34;&gt;x&lt;/span&gt; * &lt;span style=&#34;text-decoration:overline&#34;&gt;y&lt;/span&gt; - &lt;span style=&#34;text-decoration:overline&#34;&gt;x * y&lt;/span&gt;)/(&lt;span style=&#34;text-decoration:overline&#34;&gt;x&lt;/span&gt;^2 - &lt;span style=&#34;text-decoration:overline&#34;&gt;x^2&lt;/span&gt;)&lt;/p&gt;
+&lt;p&gt;and the best estimate for the b parameter is calculated by:&lt;/p&gt;
+&lt;p&gt;b = &lt;span style=&#34;text-decoration:overline&#34;&gt;y&lt;/span&gt; - a * &lt;span style=&#34;text-decoration:overline&#34;&gt;x&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The metric we will use to evaluate our results is the value R-Squared.
+R-Squared is the ratio of the sum of squares regression (SSR) and the sum of squares total (SST). Sum of Squares Regression (SSR) represents the total variation of all the predicted values found on the regression line or plane from the mean value of all the values of response variables. The sum of squares total (SST) represents the total variation of actual values from the mean value of all the values of response variables. R-squared value is used to measure the goodness of fit or best-fit line. The greater the value of R-Squared, the better is the regression model as most of the variation of actual values from the mean value get explained by the regression model.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s see how we can implement that logic with python.&lt;/p&gt;
+&lt;h2 id=&#34;the-code&#34; &gt;The code
+&lt;span&gt;
+    &lt;a href=&#34;#the-code&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;As usual we first import the necessary libraries to perform our calculations and visualizations.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;classic&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then, to perform our regression, we need some data points, so lets create a function to generate us that data.
+The function will take as parameters the number of data points we want to generate, the desired variance, the step we want to move from each data point to the next (this will help us to create positive correlated data points or negative) and the type of correlation we want (if assigned as False we ignore it).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;create_dataset&lt;/span&gt;(num_points,variance,step&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,correlation&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;False&lt;/span&gt;):
+	val &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+	ys &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+	&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_points):
+		y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; val &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;variance, variance)
+		ys&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y)
+		&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; correlation &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; correlation&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pos&amp;#39;&lt;/span&gt;:
+			val&lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt;step
+		&lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; correlation &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; correlation&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;neg&amp;#39;&lt;/span&gt;:
+			val&lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt;step
+
+	x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [i &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(len(ys))]
+
+	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array(x,dtype&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;float64), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array(ys,dtype&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;float64)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then to create and visualize our dataset we just call this function to generate our (x,y) pairs and use matplotlib to plot them. Due to the use of random numbers each time we run them we will get slightly different datasets.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;xs, ys &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; create_dataset(&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,correlation&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;pos&amp;#39;&lt;/span&gt;) 
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scatter(xs,ys,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;o&amp;#39;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Input variable (X)&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Output variable (Y)&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Our Dataset&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/linearreg_data.png&#34; alt=&#34;Linear Regression Dataset&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Then we create the necessary  functions to calculate the best values for our parameters a and b, applying the theoretical model.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;best_fit_slope_intercept&lt;/span&gt;(x,y):
+	a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ( ((np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(x)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(y)) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(x&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;y)) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;
+			((np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(x)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(x)) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(x&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;x)))
+	b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(y) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; a&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(x)
+	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; a, b
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And finally creating the function to calculate the R-Squared error and the coefficient of determinations so we can see if our results are any good.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;squared_error&lt;/span&gt;(y_orig, y_line):
+	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sum((y_line &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; y_orig)&lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
+		
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;coefficient_of_determination&lt;/span&gt;(y_orig,y_line):
+	y_mean_line &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(y_orig) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; y_orig]	
+	squared_error_reg &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; squared_error(y_orig, y_line)
+	squared_error_y_mean &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; squared_error(y_orig, y_mean_line)
+	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;(squared_error_reg&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;squared_error_y_mean)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;All we have to do now is put all of this together and run our algorithm to generate and visualize the best fit line.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;a, b &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; best_fit_slope_intercept(xs,ys)
+
+regression_line &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [(a&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;x)&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;b &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; xs]
+rsq &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; coefficient_of_determination(ys,regression_line)
+
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;scatter(xs,ys,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;g&amp;#34;&lt;/span&gt;,label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Data Points&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(xs,regression_line,color&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;,label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Best Fit line&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Linear Regression Results (Best Fit Line)&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; R-Squared Error = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;round(rsq,&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)))
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Input variable (X)&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Output variable (Y)&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;legend(loc&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;best&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/linearreg_results.png&#34; alt=&#34;Linear Regression Results&#34;&gt;&lt;/p&gt;
+&lt;p&gt;As we can see our R-Squared error is at 0.837 which means we did a pretty good job on our regression.&lt;/p&gt;
+&lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/linearregression.py&#34;&gt;github&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
