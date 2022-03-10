@@ -6,10 +6,80 @@
     <description>Nikos Avgoustis (Statistics)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Mar 2022 11:09:57 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 09 Mar 2022 12:29:01 +0200</lastBuildDate>
     
     <atom:link href="https://nikosavg.github.io/tags/statistics/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Simple Moving Average with Python from scratch.</title>
+      <link>https://nikosavg.github.io/posts/movingaverage/</link>
+      <pubDate>Wed, 09 Mar 2022 12:29:01 +0200</pubDate>
+      
+      <guid>https://nikosavg.github.io/posts/movingaverage/</guid>
+      <description>&lt;h2 id=&#34;what-is-a-moving-average&#34; &gt;What is a moving average?
+&lt;span&gt;
+    &lt;a href=&#34;#what-is-a-moving-average&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;In statistics, a moving average (rolling average or running average) is a calculation to analyze data points by creating a series of averages of different subsets of the full data set. It is also called a moving mean (MM) or rolling mean and is a type of finite impulse response filter. Variations include: simple, cumulative, or weighted forms.&lt;/p&gt;
+&lt;p&gt;A simple moving average (SMA) is the unweighted mean of the previous k data-points. An example of a simple equally weighted running mean is the mean over the last k entries of a data-set containing n entries. Let those data-points be &lt;i&gt;p&lt;sub&gt;1&lt;/sub&gt;, p&lt;sub&gt;2&lt;/sub&gt;, &amp;hellip; , p&lt;sub&gt;n&lt;/sub&gt;&lt;/i&gt;. This could be closing prices of a stock. The mean over the last k data-points (days in this example) is denoted as &lt;i&gt;SMA&lt;sub&gt;k&lt;/sub&gt;&lt;/i&gt; and calculated as:&lt;/p&gt;
+&lt;center&gt;
+&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sma.svg&#34; alt=&#34;Simple Moving Average&#34;&gt;&lt;/p&gt;
+&lt;/center&gt;
+&lt;p&gt;SMAs are often used to determine trend direction. If the SMA is moving up, the trend is up. If the SMA is moving down, the trend is down.
+So let&amp;rsquo;s see how we can implement this trend indicator in python.&lt;/p&gt;
+&lt;h2 id=&#34;the-code&#34; &gt;The code.
+&lt;span&gt;
+    &lt;a href=&#34;#the-code&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;As always, we need to import the libraries we want to use.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we will write the main function that will perform tha calculation of the Simple Moving Average.
+This function will take as arguments the data we want to perform the calculation and the time-lag we want.
+The function will replace the first n (lag value) data points with Nan (Not a number) and the rest will be replaced with the average value of the n (lag value) last data-points.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;SMA&lt;/span&gt;(data,lag&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;):
+    sma &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(lag):
+        sma&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;nan)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(lag,len(data)):
+        sma&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(data[i&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;lag:i]))
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array(sma)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we will create two datasets to test our function on. One random dataset, created by taking values from a Normal distribution and the other one from a Sinusoid function.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;random_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;normal(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;)
+x1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;) 
+
+x2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi,&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;)
+y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(x2)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We will visualize them.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x1,random_data)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,y)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/random_data.png&#34; alt=&#34;Random Data&#34;&gt;
+&lt;img src=&#34;https://nikosavg.github.io/images/sin_data.png&#34; alt=&#34;Sin Data&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Then we calculate the Simple moving averages and visualize the results to get a better understanding of the method.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;sma_rand &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SMA(random_data)
+sma_y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SMA(y)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x1,random_data)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x1,sma_rand)
+
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,y)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,sma_y)
+
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sma_rand.png&#34; alt=&#34;Simple Moving Average For Random Data&#34;&gt;
+&lt;img src=&#34;https://nikosavg.github.io/images/sma_sin.png&#34; alt=&#34;Simple Moving Average For Sin Data&#34;&gt;&lt;/p&gt;
+&lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/simplemovingaverage.py&#34;&gt;github&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;If you enjoy the post you can donate with:
+&lt;center&gt;
+&lt;p&gt;&lt;img style=&#34;max-height:1em;max-width:1em&#34; src=&#34;https://nikosavg.github.io/images/btc.svg&#34;&gt;  bc1ql5f72qggg5pafkhpkx759fc9kjnxmp5lz49048&lt;/p&gt;
+&lt;p&gt;&lt;img style=&#34;max-height:1em;max-width:1em&#34; src=&#34;https://nikosavg.github.io/images/xmr.svg&#34;&gt;  88GU1V2z9pbh98CRiZsw9VCmDkACcdysNbdV7g3Tm6Q639zjYDz3HV99g393y3kpiy3iqP2a9PSfbTdgPykPP5eEEUB4bxt&lt;span style=&#34;font-size:small;word-wrap:break-word&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Monte Carlo simulations with Python</title>
