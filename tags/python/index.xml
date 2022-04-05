@@ -6,10 +6,77 @@
     <description>Nikos Avgoustis (Python)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 09 Mar 2022 12:29:01 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 05 Apr 2022 10:40:27 +0300</lastBuildDate>
     
     <atom:link href="https://nikosavg.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Simple Exponential Smoothing in Python</title>
+      <link>https://nikosavg.github.io/posts/exponentialsmoothing/</link>
+      <pubDate>Tue, 05 Apr 2022 10:40:27 +0300</pubDate>
+      
+      <guid>https://nikosavg.github.io/posts/exponentialsmoothing/</guid>
+      <description>&lt;h2 id=&#34;exponential-smoothing&#34; &gt;Exponential Smoothing
+&lt;span&gt;
+    &lt;a href=&#34;#exponential-smoothing&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;Exponential smoothing is a rule of thumb technique for smoothing time series data using the exponential window function. Whereas in the simple moving average the past observations are weighted equally, exponential functions are used to assign exponentially decreasing weights over time. It is an easily learned and easily applied procedure for making some determination based on prior assumptions by the user, such as seasonality. Exponential smoothing is often used for analysis of time-series data.&lt;/p&gt;
+&lt;p&gt;Exponential smoothing is one of many window functions commonly applied to smooth data in signal processing, acting as low-pass filters to remove high-frequency noise. This method is preceded by Poisson&amp;rsquo;s use of recursive exponential window functions in convolutions from the 19th century, as well as Kolmogorov and Zurbenko&amp;rsquo;s use of recursive moving averages from their studies of turbulence in the 1940s.&lt;/p&gt;
+&lt;p&gt;The raw data sequence is often represented by x&lt;sub&gt;t&lt;/sub&gt; beginning at time t=0, and the output of the exponential smoothing algorithm is commonly written as s&lt;sub&gt;t&lt;/sub&gt;, which may be regarded as a best estimate of what the next value of x will be. When the sequence of observations begins at time t=0, the simplest form of exponential smoothing is given by the formulas:&lt;/p&gt;
+&lt;p&gt;s&lt;sub&gt;0&lt;/sub&gt; = x&lt;sub&gt;0&lt;/sub&gt;&lt;br&gt;
+s&lt;sub&gt;t&lt;/sub&gt; = a*x&lt;sub&gt;t&lt;/sub&gt; + (1-a)*s&lt;sub&gt;t-1&lt;/sub&gt;,  t&amp;gt;0&lt;/p&gt;
+&lt;p&gt;where a  is the smoothing factor, and 0 &amp;lt; a &amp;lt; 1.&lt;/p&gt;
+&lt;p&gt;This simple form of exponential smoothing is also known as an exponentially weighted moving average (EWMA). Technically it can also be classified as an autoregressive integrated moving average (ARIMA) model with no constant term.&lt;/p&gt;
+&lt;h2 id=&#34;the-code&#34; &gt;The code.
+&lt;span&gt;
+    &lt;a href=&#34;#the-code&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;As per usual, we first need to import the necessary libraries to implement our method.
+For this method we only need numpy for the random data functions and matplotlib to visualize the results.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fivethirtyeight&amp;#34;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;rcParams[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;figure.figsize&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we will create our datasets. We will test this method on a completely random dataset (Noise) and a Random Walk.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;time_steps &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+random_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;normal(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,time_steps)
+start &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+rw &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [start]
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(time_steps):
+    mv &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;normal(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+    rw&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(rw[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; mv)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we will calculate the exponential smoothing for both of our datasets. We will choose the smoothing factor a to be 0.2.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.2&lt;/span&gt;
+
+exp_smooth1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [random_data[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]]
+exp_smooth2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [rw[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]]
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,time_steps):
+    exp_smooth1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(random_data[i]&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;a)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;exp_smooth1[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+    exp_smooth2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(rw[i]&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;a)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;exp_smooth2[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And finally we will visualize first our random dataset and the smoothed data.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(random_data,label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Random Data&amp;#39;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(exp_smooth1,label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Exponential Smoothing a = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(a))
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;legend()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/smoothed_random.png&#34; alt=&#34;Simple Exponential Smoothing For Random Data&#34;&gt;&lt;/p&gt;
+&lt;p&gt;And then, the random walk with the smoothed data.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(rw,label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Random walk&amp;#39;&lt;/span&gt;)
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(exp_smooth2, label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Exponential Smoothing a = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(a))
+plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;legend()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/smoothed_rw.png&#34; alt=&#34;Simple Exponential Smoothing For Random Walk&#34;&gt;&lt;/p&gt;
+&lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/ExponentialSmoothing.py&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;If you enjoy the post you can donate with:
+&lt;center&gt;
+&lt;p&gt;&lt;img style=&#34;max-height:1em;max-width:1em&#34; src=&#34;https://nikosavg.github.io/images/btc.svg&#34;&gt;  bc1ql5f72qggg5pafkhpkx759fc9kjnxmp5lz49048&lt;/p&gt;
+&lt;p&gt;&lt;img style=&#34;max-height:1em;max-width:1em&#34; src=&#34;https://nikosavg.github.io/images/xmr.svg&#34;&gt;  88GU1V2z9pbh98CRiZsw9VCmDkACcdysNbdV7g3Tm6Q639zjYDz3HV99g393y3kpiy3iqP2a9PSfbTdgPykPP5eEEUB4bxt&lt;span style=&#34;font-size:small;word-wrap:break-word&#34;&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Simple Moving Average with Python from scratch.</title>
