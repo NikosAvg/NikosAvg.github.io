@@ -66,11 +66,6 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/2Drandom_walk.png&#34; alt=&#34;2DRandom Walk Image 1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/2Drandom_walk.py&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;If you enjoy the post you can donate with:
-&lt;center&gt;
-&lt;p&gt;&lt;img style=&#34;max-height:1em;max-width:1em&#34; src=&#34;https://nikosavg.github.io/images/btc.svg&#34;&gt;  bc1ql5f72qggg5pafkhpkx759fc9kjnxmp5lz49048&lt;/p&gt;
-&lt;p&gt;&lt;img style=&#34;max-height:1em;max-width:1em&#34; src=&#34;https://nikosavg.github.io/images/xmr.svg&#34;&gt;  88GU1V2z9pbh98CRiZsw9VCmDkACcdysNbdV7g3Tm6Q639zjYDz3HV99g393y3kpiy3iqP2a9PSfbTdgPykPP5eEEUB4bxt&lt;span style=&#34;font-size:small;word-wrap:break-word&#34;&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;/center&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -126,11 +121,6 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
 &lt;img src=&#34;https://nikosavg.github.io/images/random_walk3.png&#34; alt=&#34;Random Walk Image 3&#34;&gt;&lt;/p&gt;
 &lt;p&gt;As we can see after running the code 3 times, we get different random walks that&amp;rsquo;s to be expected due the nature of the process.&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/random_walk.py&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;If you enjoy the post you can donate with:
-&lt;center&gt;
-&lt;p&gt;&lt;img style=&#34;max-height:1em;max-width:1em&#34; src=&#34;https://nikosavg.github.io/images/btc.svg&#34;&gt;  bc1ql5f72qggg5pafkhpkx759fc9kjnxmp5lz49048&lt;/p&gt;
-&lt;p&gt;&lt;img style=&#34;max-height:1em;max-width:1em&#34; src=&#34;https://nikosavg.github.io/images/xmr.svg&#34;&gt;  88GU1V2z9pbh98CRiZsw9VCmDkACcdysNbdV7g3Tm6Q639zjYDz3HV99g393y3kpiy3iqP2a9PSfbTdgPykPP5eEEUB4bxt&lt;span style=&#34;font-size:small;word-wrap:break-word&#34;&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;/center&gt;&lt;/p&gt;
 </description>
     </item>
     
