@@ -193,25 +193,14 @@ if (!doNotTrack) {
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h2><p>In statistics, a moving average (rolling average or running average) is a calculation to analyze data points by creating a series of averages of different subsets of the full data set. It is also called a moving mean (MM) or rolling mean and is a type of finite impulse response filter. Variations include: simple, cumulative, or weighted forms.</p>
-<p>A simple moving average (SMA) is the unweighted mean of the previous k data-points. An example of a simple equally weighted running mean is the mean over the last k entries of a data-set containing n entries. Let those data-points be <i>p<sub>1</sub>, p<sub>2</sub>, &hellip; , p<sub>n</sub></i>. This could be closing prices of a stock. The mean over the last k data-points (days in this example) is denoted as <i>SMA<sub>k</sub></i> and calculated as:</p>
-<center>
+</h2><p>Moving average, also known as rolling average or running average, is a statistical calculation used to analyze data points by creating a series of averages of different subsets of the complete data set. It is a type of finite impulse response filter and can be simple, cumulative, or weighted.</p>
+<p>A simple moving average (SMA) is the unweighted mean of the previous k data points. For example, the mean over the last k entries of a data set containing n entries could be closing prices of a stock. If these data points are represented by p1, p2, &hellip;, pn, then the mean over the last k data points (days in this example) is denoted as SMAk and calculated as follows:</p>
 <p><img src="/images/sma.svg" alt="Simple Moving Average"></p>
-</center>
-<p>SMAs are often used to determine trend direction. If the SMA is moving up, the trend is up. If the SMA is moving down, the trend is down.
-So let&rsquo;s see how we can implement this trend indicator in python.</p>
-<h2 id="the-code" >The code.
-<span>
-    <a href="#the-code">
-        <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
-    </a>
-</span>
-</h2><p>As always, we need to import the libraries we want to use.</p>
+<p>SMAs are commonly used to determine trend direction. If the SMA is moving up, the trend is up. If the SMA is moving down, the trend is down. In this article, we will implement this trend indicator in Python.</p>
+<p>To start, we need to import the libraries we want to use. We will import matplotlib.pyplot and numpy.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
 <span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
-</code></pre></div><p>Then we will write the main function that will perform tha calculation of the Simple Moving Average.
-This function will take as arguments the data we want to perform the calculation and the time-lag we want.
-The function will replace the first n (lag value) data points with Nan (Not a number) and the rest will be replaced with the average value of the n (lag value) last data-points.</p>
+</code></pre></div><p>Next, we will write the main function that will perform the calculation of the Simple Moving Average. This function will take as arguments the data we want to perform the calculation and the time-lag we want. The function will replace the first n (lag value) data points with Nan (Not a number) and the rest will be replaced with the average value of the n (lag value) last data points.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">SMA</span>(data,lag<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>):
     sma <span style="color:#f92672">=</span> []
     <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(lag):
@@ -219,7 +208,7 @@ The function will replace the first n (lag value) data points with Nan (Not a nu
     <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(lag,len(data)):
         sma<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(data[i<span style="color:#f92672">-</span>lag:i]))
     <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>array(sma)
-</code></pre></div><p>Then we will create two datasets to test our function on. One random dataset, created by taking values from a Normal distribution and the other one from a Sinusoid function.</p>
+</code></pre></div><p>We will then create two datasets to test our function on. One random dataset, created by taking values from a Normal distribution, and the other one from a Sinusoid function.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">random_data <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">100</span>)
 x1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linspace(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">100</span>) 
 
@@ -228,9 +217,9 @@ y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin
 </code></pre></div><p>We will visualize them.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(x1,random_data)
 plt<span style="color:#f92672">.</span>plot(x2,y)
-</code></pre></div><p><img src="/images/random_data.png" alt="Random Data">
-<img src="/images/sin_data.png" alt="Sin Data"></p>
-<p>Then we calculate the Simple moving averages and visualize the results to get a better understanding of the method.</p>
+</code></pre></div><p><img src="/images/random_data.svg" alt="Random Data">
+<img src="/images/sin_data.svg" alt="Sin Data"></p>
+<p>Next, we will calculate the Simple Moving Averages and visualize the results to better understand the method.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">sma_rand <span style="color:#f92672">=</span> SMA(random_data)
 sma_y <span style="color:#f92672">=</span> SMA(y)
 </code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(x1,random_data)
@@ -240,9 +229,9 @@ plt<span style="color:#f92672">.</span>plot(x2,y)
 plt<span style="color:#f92672">.</span>plot(x2,sma_y)
 
 plt<span style="color:#f92672">.</span>show()
-</code></pre></div><p><img src="/images/sma_rand.png" alt="Simple Moving Average For Random Data">
-<img src="/images/sma_sin.png" alt="Simple Moving Average For Sin Data"></p>
-<p>The full code for this article can be found at <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/simplemovingaverage.py">github</a>.</p>
+</code></pre></div><p><img src="/images/sma_rand.svg" alt="Simple Moving Average For Random Data">
+<img src="/images/sma_sin.svg" alt="Simple Moving Average For Sin Data"></p>
+<p>The full code for this article can be found on <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/simplemovingaverage.py">GitHub</a>.</p>
 
         </div>
         
