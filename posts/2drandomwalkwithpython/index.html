@@ -187,55 +187,58 @@ if (!doNotTrack) {
             </header>
         </div>
         <div class="content e-content">
-            <p>As a continuation of the previous post on <a href="/posts/randomwalkwithpython/">random walks</a>, we will see how we can generate two dimensional random walks in python.</p>
-<h3 id="the-theory" >The theory.
+            <h2 id="2d-random-walk" >2D-Random Walk
+<span>
+    <a href="#2d-random-walk">
+        <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
+    </a>
+</span>
+</h2><p>Continuing from our previous post on <a href="/posts/randomwalkwithpython/">random walks</a>, we will now explore how to generate two-dimensional random walks using Python.</p>
+<h3 id="the-theory" >The Theory
 <span>
     <a href="#the-theory">
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h3><p>The procedure to generate a two dimendional random walk will be similar to the one for the simple one dimensional random walk with few adjustments. In the one dimensional random walk we had only 2 possible outcomes, with equal probabilities, we could either go forward or backwards. In the two dimensional walk, we now have 4 possible outcomes 2 for each dimension.</p>
-<p>So we now need to consider 4 possibilities, each with 25% chance. Those are a step forward in the X-axis, a step backwards in the X-axis, a step upwards in the Y-axis and a step downwards in the Y-axis.
-The formal definition of this 2D-random walk follows the same logic as the 1D-random walk but this time we have pair of points instead of a single point.</p>
-<h3 id="the-code" >The code.
+</h3><p>The process to generate a two-dimensional random walk is similar to the one for a simple one-dimensional random walk, with a few adjustments. In the one-dimensional random walk, we had only two possible outcomes, with equal probabilities: we could either move forward or backward. In the two-dimensional walk, we have four possible outcomes, two for each dimension.</p>
+<p>Therefore, we need to consider four possibilities, each with a 25% chance. These are a step forward in the x-axis, a step backward in the x-axis, a step upward in the y-axis, and a step downward in the y-axis. The formal definition of this two-dimensional random walk follows the same logic as the one-dimensional random walk but with a pair of points instead of a single point.</p>
+<h3 id="the-code" >The Code
 <span>
     <a href="#the-code">
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h3><p>To begin, as before, we create a file named 2D_random_walk.py and import the necessary libraries.</p>
+</h3><p>To begin, as before, we create a file named <code>2D_random_walk.py</code> and import the necessary libraries.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 <span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
-</code></pre></div><p>Then we create an two empty lists named x and y to represent our two dimensions, which we will use to store each of our data points and initialize it at 0.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>]
-y<span style="color:#f92672">=</span>[<span style="color:#ae81ff">0</span>]
-</code></pre></div><p>The next step is to choose the number of steps we want our walk to run for, in this example we choose 1000, and generate that much random integers that are either 0, 1, 2 or 3 to simulate the 25% chance.</p>
+</code></pre></div><p>Then we create two empty lists named <code>x</code> and <code>y</code> to represent our two dimensions, which we will use to store each of our data points and initialize them at 0.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">x <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>]
+y <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>]
+</code></pre></div><p>The next step is to choose the number of steps we want our walk to run for. In this example, we choose 1000 and generate that many random integers that are either 0, 1, 2, or 3 to simulate the 25% chance.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">steps <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
-probability <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">5</span>,steps)
-</code></pre></div><p>Then we are ready to create our Random walk, we will loop through our random number list and we check if the number at each time step is one of our 4 possible outcomes. If the number is 0 we will add 1 to our previous x data point else if the number is 1 we will subtract 1 from our previous x data point, if the number is 2 we add 1 to our previous y data point and if is 3 we subtract 1 from our previous y data point. Each time we don&rsquo;t add or subtract from one of our x or y data point we append to the list the previous one to indicate that there was no change.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">
-<span style="color:#66d9ef">for</span> p <span style="color:#f92672">in</span> probability:
+probability <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">5</span>, steps)
+</code></pre></div><p>Then we are ready to create our random walk. We will loop through our random number list and check if the number at each time step is one of our four possible outcomes. If the number is 0, we will add 1 to our previous <code>x</code> data point; if the number is 1, we will subtract 1 from our previous <code>x</code> data point; if the number is 2, we add 1 to our previous <code>y</code> data point; and if it is 3, we subtract 1 from our previous <code>y</code> data point. Each time we don&rsquo;t add or subtract from one of our <code>x</code> or <code>y</code> data points, we append the previous one to the list to indicate that there was no change.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">for</span> p <span style="color:#f92672">in</span> probability:
     <span style="color:#66d9ef">if</span> p <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
-        x<span style="color:#f92672">.</span>append(x[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+        x<span style="color:#f92672">.</span>append(x[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)
         y<span style="color:#f92672">.</span>append(y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
     <span style="color:#66d9ef">elif</span> p <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>:
-        x<span style="color:#f92672">.</span>append(x[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+        x<span style="color:#f92672">.</span>append(x[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
         y<span style="color:#f92672">.</span>append(y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
     <span style="color:#66d9ef">elif</span> p <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>:
-        y<span style="color:#f92672">.</span>append(y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+        y<span style="color:#f92672">.</span>append(y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)
         x<span style="color:#f92672">.</span>append(x[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
     <span style="color:#66d9ef">elif</span> p <span style="color:#f92672">==</span> <span style="color:#ae81ff">3</span>:
-        y<span style="color:#f92672">.</span>append(y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+        y<span style="color:#f92672">.</span>append(y[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
         x<span style="color:#f92672">.</span>append(x[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
-
-</code></pre></div><p>And finally we can visualize our walk by plotting the pairs with matplotlib.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(y,x)
+</code></pre></div><p>Finally, we can visualize our walk by plotting the pairs with Matplotlib.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(y, x)
 plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;2D Random Walk&#39;</span>)
 plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;X-Axis Coordinate&#39;</span>)
 plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Y-Axis Coordinate&#39;</span>)
 plt<span style="color:#f92672">.</span>show()
-</code></pre></div><p><img src="/images/2Drandom_walk.png" alt="2DRandom Walk Image 1"></p>
-<p>The full code for this article can be found at <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/2Drandom_walk.py">github</a></p>
+</code></pre></div><p><img src="/images/2Drandom_walk.svg" alt="2D Random Walk Image 1"></p>
+<p>The full code for this article can be found on <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/2Drandom_walk.py">GitHub</a>.</p>
 
         </div>
         
