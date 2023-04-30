@@ -492,7 +492,7 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability of sum of two dice throw results&amp;#34;&lt;/span&gt;)
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We choose the number of bins to be 11 to represent the 11 possible outcomes of the sum of two dice throw, which range from 2 to 12.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/2dicesumhistogram.svg&#34; alt=&#34;&amp;ldquo;Histogram of sum of two dice throw result&amp;rdquo;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/2dicehistogram.svg&#34; alt=&#34;&amp;ldquo;Histogram of sum of two dice throw result&amp;rdquo;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;As we can see from the histogram, the probability distribution of the sum of two dice throw follows a bell curve, with the most probable outcome being 7, which is the average of all possible outcomes.&lt;/p&gt;
 &lt;p&gt;In conclusion, we have seen how to simulate a dice throw in Python and how to use basic statistics to check if the probabilities of all sides are equal. We have also explored the probability distribution of the sum of two dice throw, which follows a bell curve. This technique can be extended to simulate more complex random events and can be useful in various fields such as finance, gaming, and scientific research.&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/dice_roll.py&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
