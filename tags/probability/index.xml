@@ -108,8 +108,8 @@ y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We will visualize them.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x1,random_data)
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,y)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/random_data.svg&#34; alt=&#34;Random Data&#34;&gt;
-&lt;img src=&#34;https://nikosavg.github.io/images/sin_data.svg&#34; alt=&#34;Sin Data&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/random_data.svg&#34; alt=&#34;Random Data&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sin_data.svg&#34; alt=&#34;Sin Data&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Next, we will calculate the Simple Moving Averages and visualize the results to better understand the method.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;sma_rand &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SMA(random_data)
 sma_y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SMA(y)
@@ -120,8 +120,8 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,y)
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,sma_y)
 
 plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sma_rand.svg&#34; alt=&#34;Simple Moving Average For Random Data&#34;&gt;
-&lt;img src=&#34;https://nikosavg.github.io/images/sma_sin.svg&#34; alt=&#34;Simple Moving Average For Sin Data&#34;&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sma_rand.svg&#34; alt=&#34;Simple Moving Average For Random Data&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sma_sin.svg&#34; alt=&#34;Simple Moving Average For Sin Data&#34;&gt;&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found on &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/simplemovingaverage.py&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
