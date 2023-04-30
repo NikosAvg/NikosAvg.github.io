@@ -232,12 +232,12 @@ exp_smooth2 <span style="color:#f92672">=</span> [rw[<span style="color:#ae81ff"
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(random_data,label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Random Data&#39;</span>)
 plt<span style="color:#f92672">.</span>plot(exp_smooth1,label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Exponential Smoothing a = </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(a))
 plt<span style="color:#f92672">.</span>legend()
-</code></pre></div><p><img src="/images/smoothed_random.png" alt="Simple Exponential Smoothing For Random Data"></p>
+</code></pre></div><p><img src="/images/smoothed_random.svg" alt="Simple Exponential Smoothing For Random Data"></p>
 <p>Then, we visualize the random walk with the smoothed data.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(rw,label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Random walk&#39;</span>)
 plt<span style="color:#f92672">.</span>plot(exp_smooth2, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Exponential Smoothing a = </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(a))
 plt<span style="color:#f92672">.</span>legend()
-</code></pre></div><p><img src="/images/smoothed_rw.png" alt="Simple Exponential Smoothing For Random Walk"></p>
+</code></pre></div><p><img src="/images/smoothed_rw.svg" alt="Simple Exponential Smoothing For Random Walk"></p>
 <p>The full code for this article can be found on <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/ExponentialSmoothing.py">GitHub</a></p>
 
         </div>
