@@ -193,26 +193,25 @@ if (!doNotTrack) {
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h2><p>Exponential smoothing is a rule of thumb technique for smoothing time series data using the exponential window function. Whereas in the simple moving average the past observations are weighted equally, exponential functions are used to assign exponentially decreasing weights over time. It is an easily learned and easily applied procedure for making some determination based on prior assumptions by the user, such as seasonality. Exponential smoothing is often used for analysis of time-series data.</p>
-<p>Exponential smoothing is one of many window functions commonly applied to smooth data in signal processing, acting as low-pass filters to remove high-frequency noise. This method is preceded by Poisson&rsquo;s use of recursive exponential window functions in convolutions from the 19th century, as well as Kolmogorov and Zurbenko&rsquo;s use of recursive moving averages from their studies of turbulence in the 1940s.</p>
-<p>The raw data sequence is often represented by x<sub>t</sub> beginning at time t=0, and the output of the exponential smoothing algorithm is commonly written as s<sub>t</sub>, which may be regarded as a best estimate of what the next value of x will be. When the sequence of observations begins at time t=0, the simplest form of exponential smoothing is given by the formulas:</p>
+</h2><p>Exponential smoothing is a technique used to smooth time series data using the exponential window function. Unlike the simple moving average, exponential functions assign exponentially decreasing weights to past observations over time. It is a simple and widely used method for making determinations based on user assumptions, such as seasonality. Exponential smoothing is commonly used to analyze time-series data.</p>
+<p>Exponential smoothing is one of many window functions used to smooth data in signal processing. It acts as a low-pass filter, removing high-frequency noise. Recursive exponential window functions were used by Poisson in convolutions in the 19th century, and recursive moving averages were used by Kolmogorov and Zurbenko in their studies of turbulence in the 1940s.</p>
+<p>The raw data sequence is represented by x<sub>t</sub> at time t=0, and the output of the exponential smoothing algorithm is written as s<sub>t</sub>, which is considered the best estimate of the next value of x. For a sequence that starts at t=0, the simplest form of exponential smoothing is given by the formulas:</p>
 <p>s<sub>0</sub> = x<sub>0</sub><br>
 s<sub>t</sub> = a*x<sub>t</sub> + (1-a)*s<sub>t-1</sub>,  t&gt;0</p>
-<p>where a  is the smoothing factor, and 0 &lt; a &lt; 1.</p>
-<p>This simple form of exponential smoothing is also known as an exponentially weighted moving average (EWMA). Technically it can also be classified as an autoregressive integrated moving average (ARIMA) model with no constant term.</p>
-<h2 id="the-code" >The code.
+<p>where a is the smoothing factor, and 0 &lt; a &lt; 1.</p>
+<p>This simple form of exponential smoothing is also called an exponentially weighted moving average (EWMA). Technically, it can be classified as an autoregressive integrated moving average (ARIMA) model with no constant term.</p>
+<h2 id="the-code" >The code
 <span>
     <a href="#the-code">
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h2><p>As per usual, we first need to import the necessary libraries to implement our method.
-For this method we only need numpy for the random data functions and matplotlib to visualize the results.</p>
+</h2><p>To implement this method, we need to import the necessary libraries first. We only need numpy for random data functions and matplotlib to visualize the results.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
 <span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 plt<span style="color:#f92672">.</span>style<span style="color:#f92672">.</span>use(<span style="color:#e6db74">&#34;fivethirtyeight&#34;</span>)
 plt<span style="color:#f92672">.</span>rcParams[<span style="color:#e6db74">&#34;figure.figsize&#34;</span>] <span style="color:#f92672">=</span> (<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">10</span>)
-</code></pre></div><p>Then we will create our datasets. We will test this method on a completely random dataset (Noise) and a Random Walk.</p>
+</code></pre></div><p>Next, we create our datasets. We test this method on two datasets: random noise and a random walk.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">time_steps <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
 random_data <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>,time_steps)
 start <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
@@ -220,7 +219,7 @@ rw <span style="color:#f92672">=</span> [start]
 <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(time_steps):
     mv <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">if</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
     rw<span style="color:#f92672">.</span>append(rw[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> mv)
-</code></pre></div><p>Then we will calculate the exponential smoothing for both of our datasets. We will choose the smoothing factor a to be 0.2.</p>
+</code></pre></div><p>Then we calculate the exponential smoothing for both datasets. We choose the smoothing factor a to be 0.2.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">a <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.2</span>
 
 exp_smooth1 <span style="color:#f92672">=</span> [random_data[<span style="color:#ae81ff">0</span>]]
@@ -229,17 +228,17 @@ exp_smooth2 <span style="color:#f92672">=</span> [rw[<span style="color:#ae81ff"
 <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>,time_steps):
     exp_smooth1<span style="color:#f92672">.</span>append(random_data[i]<span style="color:#f92672">*</span>a <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>a)<span style="color:#f92672">*</span>exp_smooth1[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
     exp_smooth2<span style="color:#f92672">.</span>append(rw[i]<span style="color:#f92672">*</span>a <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">-</span>a)<span style="color:#f92672">*</span>exp_smooth2[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
-</code></pre></div><p>And finally we will visualize first our random dataset and the smoothed data.</p>
+</code></pre></div><p>Finally, we visualize the random dataset and the smoothed data.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(random_data,label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Random Data&#39;</span>)
 plt<span style="color:#f92672">.</span>plot(exp_smooth1,label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Exponential Smoothing a = </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(a))
 plt<span style="color:#f92672">.</span>legend()
 </code></pre></div><p><img src="/images/smoothed_random.png" alt="Simple Exponential Smoothing For Random Data"></p>
-<p>And then, the random walk with the smoothed data.</p>
+<p>Then, we visualize the random walk with the smoothed data.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>plot(rw,label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Random walk&#39;</span>)
 plt<span style="color:#f92672">.</span>plot(exp_smooth2, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Exponential Smoothing a = </span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#39;</span><span style="color:#f92672">.</span>format(a))
 plt<span style="color:#f92672">.</span>legend()
 </code></pre></div><p><img src="/images/smoothed_rw.png" alt="Simple Exponential Smoothing For Random Walk"></p>
-<p>The full code for this article can be found at <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/ExponentialSmoothing.py">github</a></p>
+<p>The full code for this article can be found on <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/ExponentialSmoothing.py">GitHub</a></p>
 
         </div>
         
