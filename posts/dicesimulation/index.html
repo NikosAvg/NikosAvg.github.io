@@ -187,55 +187,55 @@ if (!doNotTrack) {
             </header>
         </div>
         <div class="content e-content">
-            <h2 id="the-theory" >The theory
+            <h2 id="theory" >Theory
 <span>
-    <a href="#the-theory">
+    <a href="#theory">
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h2><p>Dice are thrown to provide random numbers for gambling and other games, and thus are a type of hardware random number generator. The result of a die roll is random in the sense of lacking predictability, not lacking cause. In a fair dice each outcome (side) has the same probability of 1/6.</p>
-<p>The implementation it&rsquo;s easy, all we have to do is create a function in python that returns a random integer between 1 and 6. After that to check if the probabilities of all sides are equal we can repeat this process enough, so we will have a big enough sample size to perform some basic statistics.</p>
-<h2 id="the-code" >The code
+</h2><p>Dice are used to provide random numbers for gambling and other games, and hence are a type of hardware random number generator. The result of a die roll is random in the sense of lacking predictability, not lacking cause. In a fair dice, each outcome (side) has the same probability of 1/6.</p>
+<p>The implementation is easy; all we have to do is create a Python function that returns a random integer between 1 and 6. To check if the probabilities of all sides are equal, we can repeat this process enough times to have a sufficiently large sample size to perform some basic statistics.</p>
+<h2 id="code" >Code
 <span>
-    <a href="#the-code">
+    <a href="#code">
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h2><p>First we have to import our necessary libraries to generate our random numbers and visualize the results.</p>
+</h2><p>First, we need to import the necessary libraries to generate our random numbers and visualize the results.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 <span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
 plt<span style="color:#f92672">.</span>style<span style="color:#f92672">.</span>use(<span style="color:#e6db74">&#39;classic&#39;</span>)
-</code></pre></div><p>Then we create a function call diceRoll which will generate a random integer between 1 and 6 and return it to us.</p>
+</code></pre></div><p>Then we create a function called <code>diceRoll</code> which generates a random integer between 1 and 6 and returns it to us.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">diceRoll</span>():
-    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">7</span>)
-</code></pre></div><p>Then we initialize a variable that will store the number of desired rolls, run our experiment and store the results in a list.</p>
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">7</span>)
+</code></pre></div><p>Next, we initialize a variable that stores the number of desired rolls, run our experiment, and store the results in a list.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">number_of_rolls <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>
 results <span style="color:#f92672">=</span> []
 <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(number_of_rolls):
     results<span style="color:#f92672">.</span>append(diceRoll())
-</code></pre></div><p>Now we can visualize our results by plotting them using a <a href="https://www.investopedia.com/terms/h/histogram.asp">histogram</a>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>hist(results,density<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,bins <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>)
+</code></pre></div><p>We can now visualize our results by plotting them using a <a href="https://www.investopedia.com/terms/h/histogram.asp">histogram</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>hist(results, density<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, bins<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>)
 plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#34;Possible Outcomes&#34;</span>)
 plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;Probability&#34;</span>)
-plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Probability of Dice throw results&#34;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Probability of Dice Throw Results&#34;</span>)
 plt<span style="color:#f92672">.</span>show()
-</code></pre></div><p>We choose the number of bins to be 6 because these are our only possible outcomes and we are interested to see how often these appear.</p>
-<p><img src="/images/dicehistogram.png" alt="&ldquo;Histogram of dice throw result&rdquo;"></p>
-<h1 id="the-sum-of-2-dice" >The sum of 2 dice
+</code></pre></div><p>We choose the number of bins to be 6 because these are our only possible outcomes, and we want to see how often each one appears.</p>
+<p><img src="/images/dicehistogram.svg" alt="Histogram of dice throw result"></p>
+<h1 id="the-sum-of-two-dice" >The Sum of Two Dice
 <span>
-    <a href="#the-sum-of-2-dice">
+    <a href="#the-sum-of-two-dice">
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h1><p>After seeing the results of a single dice throw, it&rsquo;s only natural to think how would the probability distribution of the sum of two dice.</p>
-<p>Let&rsquo;s first see some of the theory of two dice throw.</p>
-<h2 id="the-theory-1" >The theory
+</h1><p>After seeing the results of a single dice throw, it&rsquo;s only natural to consider the probability distribution of the sum of two dice.</p>
+<p>Let&rsquo;s first examine some of the theory of rolling two dice.</p>
+<h2 id="theory-1" >Theory
 <span>
-    <a href="#the-theory-1">
+    <a href="#theory-1">
         <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
     </a>
 </span>
-</h2><p>All possible combinations of two dice throw, our sample space, is</p>
+</h2><p>All possible combinations of rolling two dice, our sample space, are shown below:</p>
 <center>
 <table>
 <thead>
@@ -307,95 +307,18 @@ plt<span style="color:#f92672">.</span>show()
 </tbody>
 </table>
 </center>
-<p>So as we can see there are 36 possible combinations of rolls and each dice acts independent of the other so to calculate the probability of each pair all we have to do is multiply the probabilities of the individual outcomes and because, as we saw earlier, each individual outcome has a probability of 1/6, each pair of outcomes has a probability of 1/36.</p>
-<p>Now for the probability of sum of the two dice we first need to find all the possible outcomes (sums) and all the possible pairs so we can add the probabilities.</p>
-<center>
-<table>
-<thead>
-<tr>
-<th style="text-align:center">Sum</th>
-<th style="text-align:center">Possible pairs</th>
-<th style="text-align:center">Probability</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">1/36</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">2/36</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">3/36</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">4/36</td>
-</tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">5</td>
-<td style="text-align:center">5/36</td>
-</tr>
-<tr>
-<td style="text-align:center">7</td>
-<td style="text-align:center">6</td>
-<td style="text-align:center">6/36</td>
-</tr>
-<tr>
-<td style="text-align:center">8</td>
-<td style="text-align:center">5</td>
-<td style="text-align:center">5/36</td>
-</tr>
-<tr>
-<td style="text-align:center">9</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">4/36</td>
-</tr>
-<tr>
-<td style="text-align:center">10</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">3/36</td>
-</tr>
-<tr>
-<td style="text-align:center">11</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">2/36</td>
-</tr>
-<tr>
-<td style="text-align:center">12</td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">1/36</td>
-</tr>
-</tbody>
-</table>
-</center>
-<p>Let&rsquo;s see how we can generate those results and visualize them by reusing the function we wrote for the dice roll.</p>
-<h2 id="the-code-1" >The code
-<span>
-    <a href="#the-code-1">
-        <svg viewBox="0 0 28 23" height="100%" width="19" xmlns="http://www.w3.org/2000/svg"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" fill="none" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/></svg>
-    </a>
-</span>
-</h2><p>For these we will use the same function and just call it twice and add the results before we store it to a list. Again we will run this simulation enough times to ensure that we have enough samples to draw a significant conclusion.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">results2 <span style="color:#f92672">=</span> []
-<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(number_of_rolls):
-    results2<span style="color:#f92672">.</span>append(diceRoll()<span style="color:#f92672">+</span>diceRoll())
-</code></pre></div><p>Then we will just plot the histogram to get a better idea of the results.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>hist(results2,density<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,bins<span style="color:#f92672">=</span><span style="color:#ae81ff">11</span>)
+<p>As we can observe, there are 36 possible combinations of rolls, and each die acts independently of the other. Therefore, to calculate the probability of each pair, we need to multiply the probabilities of the individual outcomes. Since each individual outcome has a probability of 1/6, each pair of outcomes has a probability of 1/36.</p>
+<p>Now, to determine the probability of the sum of the two dice, we first need to identify all the possible outcomes (sums) and all the possible pairs, so we can add their probabilities.</p>
+<p>Now we can visualize our results using another histogram.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">plt<span style="color:#f92672">.</span>hist(results,density<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,bins <span style="color:#f92672">=</span> <span style="color:#ae81ff">11</span>)
 plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#34;Possible Outcomes&#34;</span>)
 plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#34;Probability&#34;</span>)
-plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Probability of The Sum of Two Dice&#34;</span>)
+plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#34;Probability of sum of two dice throw results&#34;</span>)
 plt<span style="color:#f92672">.</span>show()
-</code></pre></div><p><img src="/images/2dicehistogram.png" alt="&ldquo;Histogram of the sum of two dice&rdquo;"></p>
-<p>As we can see from the histogram the results of the simulation match the theoretical.</p>
+</code></pre></div><p>We choose the number of bins to be 11 to represent the 11 possible outcomes of the sum of two dice throw, which range from 2 to 12.</p>
+<p><img src="/images/dicesumhistogram.svg" alt="&ldquo;Histogram of sum of two dice throw result&rdquo;"></p>
+<p>As we can see from the histogram, the probability distribution of the sum of two dice throw follows a bell curve, with the most probable outcome being 7, which is the average of all possible outcomes.</p>
+<p>In conclusion, we have seen how to simulate a dice throw in Python and how to use basic statistics to check if the probabilities of all sides are equal. We have also explored the probability distribution of the sum of two dice throw, which follows a bell curve. This technique can be extended to simulate more complex random events and can be useful in various fields such as finance, gaming, and scientific research.</p>
 <p>The full code for this article can be found at <a href="https://github.com/NikosAvg/Blog_Codes/blob/main/dice_roll.py">github</a></p>
 
         </div>
@@ -496,10 +419,14 @@ plt<span style="color:#f92672">.</span>show()
 
 
 
+    <button class="theme-switcher">
+        Dark theme
+    </button>
+
 
 <script>
 const STORAGE_KEY = 'user-color-scheme'
-const defaultTheme = "light-without-switcher"
+const defaultTheme = "light"
 
 let currentTheme
 let switchButton
