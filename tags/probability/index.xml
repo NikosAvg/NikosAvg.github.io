@@ -6,125 +6,10 @@
     <description>Nikos Avgoustis (Probability)</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 Apr 2022 10:40:27 +0300</lastBuildDate>
+    <lastBuildDate>Wed, 02 Mar 2022 07:42:45 +0200</lastBuildDate>
     
     <atom:link href="https://nikosavg.github.io/tags/probability/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Simple Exponential Smoothing in Python</title>
-      <link>https://nikosavg.github.io/posts/exponentialsmoothing/</link>
-      <pubDate>Tue, 05 Apr 2022 10:40:27 +0300</pubDate>
-      
-      <guid>https://nikosavg.github.io/posts/exponentialsmoothing/</guid>
-      <description>&lt;h2 id=&#34;exponential-smoothing&#34; &gt;Exponential Smoothing
-&lt;span&gt;
-    &lt;a href=&#34;#exponential-smoothing&#34;&gt;
-        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
-    &lt;/a&gt;
-&lt;/span&gt;
-&lt;/h2&gt;&lt;p&gt;Exponential smoothing is a technique used to smooth time series data using the exponential window function. Unlike the simple moving average, exponential functions assign exponentially decreasing weights to past observations over time. It is a simple and widely used method for making determinations based on user assumptions, such as seasonality. Exponential smoothing is commonly used to analyze time-series data.&lt;/p&gt;
-&lt;p&gt;Exponential smoothing is one of many window functions used to smooth data in signal processing. It acts as a low-pass filter, removing high-frequency noise. Recursive exponential window functions were used by Poisson in convolutions in the 19th century, and recursive moving averages were used by Kolmogorov and Zurbenko in their studies of turbulence in the 1940s.&lt;/p&gt;
-&lt;p&gt;The raw data sequence is represented by x&lt;sub&gt;t&lt;/sub&gt; at time t=0, and the output of the exponential smoothing algorithm is written as s&lt;sub&gt;t&lt;/sub&gt;, which is considered the best estimate of the next value of x. For a sequence that starts at t=0, the simplest form of exponential smoothing is given by the formulas:&lt;/p&gt;
-&lt;p&gt;s&lt;sub&gt;0&lt;/sub&gt; = x&lt;sub&gt;0&lt;/sub&gt;&lt;br&gt;
-s&lt;sub&gt;t&lt;/sub&gt; = a*x&lt;sub&gt;t&lt;/sub&gt; + (1-a)*s&lt;sub&gt;t-1&lt;/sub&gt;,  t&amp;gt;0&lt;/p&gt;
-&lt;p&gt;where a is the smoothing factor, and 0 &amp;lt; a &amp;lt; 1.&lt;/p&gt;
-&lt;p&gt;This simple form of exponential smoothing is also called an exponentially weighted moving average (EWMA). Technically, it can be classified as an autoregressive integrated moving average (ARIMA) model with no constant term.&lt;/p&gt;
-&lt;h2 id=&#34;the-code&#34; &gt;The code
-&lt;span&gt;
-    &lt;a href=&#34;#the-code&#34;&gt;
-        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
-    &lt;/a&gt;
-&lt;/span&gt;
-&lt;/h2&gt;&lt;p&gt;To implement this method, we need to import the necessary libraries first. We only need numpy for random data functions and matplotlib to visualize the results.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fivethirtyeight&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;rcParams[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;figure.figsize&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Next, we create our datasets. We test this method on two datasets: random noise and a random walk.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;time_steps &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
-random_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;normal(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,time_steps)
-start &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-rw &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [start]
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(time_steps):
-    mv &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;normal(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
-    rw&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(rw[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; mv)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we calculate the exponential smoothing for both datasets. We choose the smoothing factor a to be 0.2.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.2&lt;/span&gt;
-
-exp_smooth1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [random_data[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]]
-exp_smooth2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [rw[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]]
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,time_steps):
-    exp_smooth1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(random_data[i]&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;a)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;exp_smooth1[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
-    exp_smooth2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(rw[i]&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;a &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;a)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;exp_smooth2[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Finally, we visualize the random dataset and the smoothed data.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(random_data,label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Random Data&amp;#39;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(exp_smooth1,label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Exponential Smoothing a = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(a))
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;legend()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/smoothed_random.svg&#34; alt=&#34;Simple Exponential Smoothing For Random Data&#34;&gt;&lt;/p&gt;
-&lt;p&gt;Then, we visualize the random walk with the smoothed data.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(rw,label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Random walk&amp;#39;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(exp_smooth2, label&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Exponential Smoothing a = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(a))
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;legend()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/smoothed_rw.svg&#34; alt=&#34;Simple Exponential Smoothing For Random Walk&#34;&gt;&lt;/p&gt;
-&lt;p&gt;The full code for this article can be found on &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/ExponentialSmoothing.py&#34;&gt;GitHub&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Simple Moving Average with Python from scratch.</title>
-      <link>https://nikosavg.github.io/posts/movingaverage/</link>
-      <pubDate>Wed, 09 Mar 2022 12:29:01 +0200</pubDate>
-      
-      <guid>https://nikosavg.github.io/posts/movingaverage/</guid>
-      <description>&lt;h2 id=&#34;what-is-a-moving-average&#34; &gt;What is a moving average?
-&lt;span&gt;
-    &lt;a href=&#34;#what-is-a-moving-average&#34;&gt;
-        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
-    &lt;/a&gt;
-&lt;/span&gt;
-&lt;/h2&gt;&lt;p&gt;Moving average, also known as rolling average or running average, is a statistical calculation used to analyze data points by creating a series of averages of different subsets of the complete data set. It is a type of finite impulse response filter and can be simple, cumulative, or weighted.&lt;/p&gt;
-&lt;p&gt;A simple moving average (SMA) is the unweighted mean of the previous k data points. For example, the mean over the last k entries of a data set containing n entries could be closing prices of a stock. If these data points are represented by p1, p2, &amp;hellip;, pn, then the mean over the last k data points (days in this example) is denoted as SMAk and calculated as follows:&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sma.svg&#34; alt=&#34;Simple Moving Average&#34;&gt;&lt;/p&gt;
-&lt;p&gt;SMAs are commonly used to determine trend direction. If the SMA is moving up, the trend is up. If the SMA is moving down, the trend is down. In this article, we will implement this trend indicator in Python.&lt;/p&gt;
-&lt;p&gt;To start, we need to import the libraries we want to use. We will import matplotlib.pyplot and numpy.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Next, we will write the main function that will perform the calculation of the Simple Moving Average. This function will take as arguments the data we want to perform the calculation and the time-lag we want. The function will replace the first n (lag value) data points with Nan (Not a number) and the rest will be replaced with the average value of the n (lag value) last data points.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;SMA&lt;/span&gt;(data,lag&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;):
-    sma &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(lag):
-        sma&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;nan)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(lag,len(data)):
-        sma&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(data[i&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;lag:i]))
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array(sma)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We will then create two datasets to test our function on. One random dataset, created by taking values from a Normal distribution, and the other one from a Sinusoid function.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;random_data &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;normal(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;)
-x1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;) 
-
-x2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi,&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;)
-y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(x2)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We will visualize them.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x1,random_data)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,y)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/random_data.svg&#34; alt=&#34;Random Data&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sin_data.svg&#34; alt=&#34;Sin Data&#34;&gt;&lt;/p&gt;
-&lt;p&gt;Next, we will calculate the Simple Moving Averages and visualize the results to better understand the method.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;sma_rand &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SMA(random_data)
-sma_y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SMA(y)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x1,random_data)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x1,sma_rand)
-
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,y)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x2,sma_y)
-
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sma_rand.svg&#34; alt=&#34;Simple Moving Average For Random Data&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sma_sin.svg&#34; alt=&#34;Simple Moving Average For Sin Data&#34;&gt;&lt;/p&gt;
-&lt;p&gt;The full code for this article can be found on &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/simplemovingaverage.py&#34;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
     
     <item>
       <title>Monte Carlo Integration in Python</title>
@@ -148,102 +33,101 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
     &lt;/a&gt;
 &lt;/span&gt;
 &lt;/h2&gt;&lt;p&gt;As usual we first import all our libraries.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
-&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; mpl_toolkits.mplot3d &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Axes3D
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;classic&amp;#34;&lt;/span&gt;)
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we have to define any function we want to use.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;func&lt;/span&gt;(x):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(x)
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;func2d&lt;/span&gt;(x,y):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(x)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exp(y)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And initialize the number of simulations we want to run as well as the number of random points we want to draw for our function evaluations.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;sampling_num &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;
-num_sim &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Before we perform any calculation, we plot our functions in the desired interval, to get a basic idea of what we will be calculating.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; mpl_toolkits.mplot3d &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Axes3D
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;classic&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we have to define any function we want to use.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;func&lt;/span&gt;(x):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sin(x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;func2d&lt;/span&gt;(x,y):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;cos(x)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exp(y)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And initialize the number of simulations we want to run as well as the number of random points we want to draw for our function evaluations.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sampling_num &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;num_sim &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Before we perform any calculation, we plot our functions in the desired interval, to get a basic idea of what we will be calculating.&lt;/p&gt;
 &lt;p&gt;Our first function is the function f(x) = sin(x) in the interval [0,π].&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;a&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-b&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi
-x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(a,b,sampling_num)
-y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; func(x)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sin(x)&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sin(x)&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x,y)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sinx.png&#34; alt=&#34;Sinx plot&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;a&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;b&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(a,b,sampling_num)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; func(x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sin(x)&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;x&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Sin(x)&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x,y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sinx.png&#34; alt=&#34;Sinx plot&#34;&gt;&lt;/p&gt;
 &lt;p&gt;And our 2D function is f(x,y) = cos(x)*exp(y) in [0,π/2]x[0,1].&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;x_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
-x_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
-y_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; 
-y_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
-x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(x_min, x_max, sampling_num)
-y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(y_min,y_max,sampling_num)
-X, Y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;meshgrid(x, y)
-func &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; func2d(X,Y)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;fig &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure()
-ax &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Axes3D(fig)
-ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot_surface(X, Y, func)
-ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x&amp;#39;&lt;/span&gt;)
-ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;)
-ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_zlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Cos(x)*Exp(y)&amp;#39;&lt;/span&gt;)
-ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;view_init(&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;) 
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To visualize our 2D function there are 2 ways. The classical 3D surface plot with axes (x,y,f(x,y)).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pi&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;y_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;y_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(x_min, x_max, sampling_num)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;linspace(y_min,y_max,sampling_num)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;X, Y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;meshgrid(x, y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;func &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; func2d(X,Y)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;fig &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;figure()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ax &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Axes3D(fig)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot_surface(X, Y, func)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;x&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;y&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_zlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;Cos(x)*Exp(y)&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ax&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;view_init(&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To visualize our 2D function there are 2 ways. The classical 3D surface plot with axes (x,y,f(x,y)).&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/func2d.png&#34; alt=&#34;2d function plot&#34;&gt;&lt;/p&gt;
 &lt;p&gt;And the &lt;a href=&#34;https://en.wikipedia.org/wiki/Contour_line&#34;&gt;contour plot&lt;/a&gt;, which is a graphical technique for representing a 3-dimensional surface by plotting constant z slices, called contours, on a 2-dimensional format.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/contourfunc2d.png&#34; alt=&#34;2d function contour plot&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Then we have to define the functions that will perform the integration, for demonstration purposes we define 2 different functions, one for the 1D case and one for the 2D.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MonteCarloIntegral&lt;/span&gt;(function,a,b,sampling_num):
-    rest &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(sampling_num):
-        rest&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(function(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(a,b)))
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; rest
-    
-&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MonteCarlo2DIntegral&lt;/span&gt;(function,x_min,x_max,y_min,y_max,sampling_num):
-    rest &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(sampling_num):
-        rest&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(function(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(x_min,x_max),np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(y_min,y_max)))
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; rest
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we perform the numerical integration for the first function.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;actual_val &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
-err &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_sim):
-    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MonteCarloIntegral(sin,b,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,sampling_num)
-    integral &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (b&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;a)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(r)
-    results&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral)
-    err&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;actual_val)
-print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Value Calculated = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(results)))
-print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mean error = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(err)))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And plot the results in a histogram.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Distribution of Areas Calculated&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Areas&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of Times Calculated&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sinx_hist.png&#34; alt=&#34;Histogram of the estimation of sinx integral&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MonteCarloIntegral&lt;/span&gt;(function,a,b,sampling_num):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    rest &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(sampling_num):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        rest&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(function(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(a,b)))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; rest
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;MonteCarlo2DIntegral&lt;/span&gt;(function,x_min,x_max,y_min,y_max,sampling_num):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    rest &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(sampling_num):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        rest&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(function(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(x_min,x_max),np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;uniform(y_min,y_max)))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; rest
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we perform the numerical integration for the first function.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;actual_val &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;err &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_sim):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MonteCarloIntegral(sin,b,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,sampling_num)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    integral &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (b&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;a)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(r)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    results&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    err&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;actual_val)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Value Calculated = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(results)))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mean error = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(err)))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And plot the results in a histogram.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Distribution of Areas Calculated&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Areas&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of Times Calculated&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/sinx_hist.png&#34; alt=&#34;Histogram of the estimation of sinx integral&#34;&gt;&lt;/p&gt;
 &lt;p&gt;As we can see the analytical solution for the integral is 2 and our numerical solution 2.26, which gives us an error of 0.26. Which means we overestimated by 0.26.&lt;/p&gt;
 &lt;p&gt;Then we proceed to our 2D function and perform a similar procedure.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;actual_value2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.71828&lt;/span&gt;
-results2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-err2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_sim):
-    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MonteCarlo2DIntegral(func2d,x_min,x_max,y_min,y_max,sampling_num)
-    integral &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (x_max&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;x_min)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;(y_max&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;y_min)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(r)
-    results2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral)
-    err2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;actual_value2)
-print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Value Calculated = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(results2)))
-print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mean error = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(err2)))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And we also plot the results in a histogram.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results2)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Distribution of Areas Calculated&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Areas&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of Times Calculated&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/func2d_hist.png&#34; alt=&#34;Histogram of the estimation of 2d integral&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;actual_value2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.71828&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;results2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;err2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_sim):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    r &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; MonteCarlo2DIntegral(func2d,x_min,x_max,y_min,y_max,sampling_num)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    integral &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (x_max&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;x_min)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;(y_max&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;y_min)&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(r)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    results2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    err2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(integral&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;actual_value2)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Value Calculated = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(results2)))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Mean error = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(err2)))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And we also plot the results in a histogram.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results2)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Distribution of Areas Calculated&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Areas&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of Times Calculated&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/func2d_hist.png&#34; alt=&#34;Histogram of the estimation of 2d integral&#34;&gt;&lt;/p&gt;
 &lt;p&gt;As we can see the analytical solution for the integral is 1.71828 and our numerical solution 1.7177, which gives us an error of -0.00058 . Which means we underestimated by 0.00058.&lt;/p&gt;
 &lt;p&gt;So as we can see from our results this method works better on higher-dimensional integrals, the theory suggested.&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/montecarintegration.py&#34;&gt;github&lt;/a&gt;.&lt;/p&gt;
@@ -281,66 +165,66 @@ So as we see it&amp;rsquo;s not wise play this game, but for the sake of this ar
     &lt;/a&gt;
 &lt;/span&gt;
 &lt;/h2&gt;&lt;p&gt;As always we first need to import any libraries we plan to use. For this example we only need matplotlib and numpy.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;classic&amp;#39;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we will create some functions to help us with the simulation. We need three functions:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;classic&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we will create some functions to help us with the simulation. We need three functions:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;A function to simulate a dice roll.&lt;/li&gt;
 &lt;li&gt;A function to simulate our player.&lt;/li&gt;
 &lt;li&gt;And a function to run the simulation.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;For the dice roll function we can use the one we wrote at &lt;a href=&#34;https://nikosavg.github.io/posts/dicesimulation/&#34;&gt;Dice Simulation in Python&lt;/a&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;diceRoll&lt;/span&gt;():
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For the player function, we will pass as parameters our bet and the result of our dice roll function and if the two match we will return True, else we&amp;rsquo;ll return False.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;player&lt;/span&gt;(bet,dice_result):
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; bet &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; dice_result:
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;False&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And finally for the simulation function, we will pass as parameters our initial position (10.000$), the number of desired simulations (100), our bet (in the dice example it really doesn&amp;rsquo;t matter because all outcomes have the same probability), the amount we want to bet at each roll (100$) and the number of bets we want to play for.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;diceRoll&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For the player function, we will pass as parameters our bet and the result of our dice roll function and if the two match we will return True, else we&amp;rsquo;ll return False.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;player&lt;/span&gt;(bet,dice_result):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; bet &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; dice_result:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;False&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And finally for the simulation function, we will pass as parameters our initial position (10.000$), the number of desired simulations (100), our bet (in the dice example it really doesn&amp;rsquo;t matter because all outcomes have the same probability), the amount we want to bet at each roll (100$) and the number of bets we want to play for.
 Then we will loop the number of simulations we passed and at each simulation we will play for the desired number of bets and record our positions after each bet.
 The function will return a timeseries for each time we run our simulation. Then we can plot them to visualize the results and perform some basic statistics to validate the theoretical results.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Simulation&lt;/span&gt;(initial_position,num_simulations,bet_number,bet_amount,num_of_bets):
-    results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_simulations):
-        y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [initial_position]
-        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_of_bets):
-            dice &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; diceRoll()
-            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; player(diceRoll(),bet):
-                y&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;bet_amount)
-            &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
-                y&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;bet_amount)
-        results&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; results
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We are now ready to initialize our parameters for the simulation and run it.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;num_simulations &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
-initial_position &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;
-num_of_bets &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;
-bet_number &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;
-bet_amount &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;
-
-results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Simulation(initial_position,num_simulations,bet_number,bet_amount,num_of_bets)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The variable results holds all our timeserieses. By plotting them we can see that our theoretical results match the results of our simulation.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Simulation&lt;/span&gt;(initial_position,num_simulations,bet_number,bet_amount,num_of_bets):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_simulations):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [initial_position]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num_of_bets):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            dice &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; diceRoll()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; player(diceRoll(),bet):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                y&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;bet_amount)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                y&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;bet_amount)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        results&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; results
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We are now ready to initialize our parameters for the simulation and run it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;num_simulations &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;initial_position &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;num_of_bets &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bet_number &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bet_amount &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Simulation(initial_position,num_simulations,bet_number,bet_amount,num_of_bets)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The variable results holds all our timeserieses. By plotting them we can see that our theoretical results match the results of our simulation.
 As we see each simulation started at 10.000$ and the average amount we have at the end of all the simulations is 3.314,8$ which is around 33.1%.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(range(num_of_bets&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))
-end_value &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; results]
-mean_end_value &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(end_value)
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; results:
-    plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x,y)
-    
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of bets&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Position&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Monte Carlo Simulation of &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; dice rolls &lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; (Mean End Amount = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;)&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(num_of_bets,mean_end_value))
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/montecarlo_bets_100.png&#34; alt=&#34;Monte Carlo Image&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(range(num_of_bets&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;end_value &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [y[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; results]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mean_end_value &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;mean(end_value)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; results:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;plot(x,y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of bets&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Position&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Monte Carlo Simulation of &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; dice rolls &lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; (Mean End Amount = &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;)&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;format(num_of_bets,mean_end_value))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/montecarlo_bets_100.png&#34; alt=&#34;Monte Carlo Image&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Another way to visualize our results is via a histogram.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(end_value,density&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Final amounts&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Histogram of our Final amounts&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/montecarlhist.png&#34; alt=&#34;Monte Carlo Histogram&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(end_value,density&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Final amounts&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Histogram of our Final amounts&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/montecarlhist.png&#34; alt=&#34;Monte Carlo Histogram&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Again, as we see in the histogram, our most common outcome is the 33% loss.&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/montecarlodice.py&#34;&gt;github&lt;/a&gt;.&lt;/p&gt;
 </description>
@@ -352,55 +236,55 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
       <pubDate>Mon, 28 Feb 2022 19:30:09 +0200</pubDate>
       
       <guid>https://nikosavg.github.io/posts/dicesimulation/</guid>
-      <description>&lt;h2 id=&#34;theory&#34; &gt;Theory
+      <description>&lt;h2 id=&#34;the-theory&#34; &gt;The theory
 &lt;span&gt;
-    &lt;a href=&#34;#theory&#34;&gt;
+    &lt;a href=&#34;#the-theory&#34;&gt;
         &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
     &lt;/a&gt;
 &lt;/span&gt;
-&lt;/h2&gt;&lt;p&gt;Dice are used to provide random numbers for gambling and other games, and hence are a type of hardware random number generator. The result of a die roll is random in the sense of lacking predictability, not lacking cause. In a fair dice, each outcome (side) has the same probability of 1/6.&lt;/p&gt;
-&lt;p&gt;The implementation is easy; all we have to do is create a Python function that returns a random integer between 1 and 6. To check if the probabilities of all sides are equal, we can repeat this process enough times to have a sufficiently large sample size to perform some basic statistics.&lt;/p&gt;
-&lt;h2 id=&#34;code&#34; &gt;Code
+&lt;/h2&gt;&lt;p&gt;Dice are thrown to provide random numbers for gambling and other games, and thus are a type of hardware random number generator. The result of a die roll is random in the sense of lacking predictability, not lacking cause. In a fair dice each outcome (side) has the same probability of 1/6.&lt;/p&gt;
+&lt;p&gt;The implementation it&amp;rsquo;s easy, all we have to do is create a function in python that returns a random integer between 1 and 6. After that to check if the probabilities of all sides are equal we can repeat this process enough, so we will have a big enough sample size to perform some basic statistics.&lt;/p&gt;
+&lt;h2 id=&#34;the-code&#34; &gt;The code
 &lt;span&gt;
-    &lt;a href=&#34;#code&#34;&gt;
+    &lt;a href=&#34;#the-code&#34;&gt;
         &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
     &lt;/a&gt;
 &lt;/span&gt;
-&lt;/h2&gt;&lt;p&gt;First, we need to import the necessary libraries to generate our random numbers and visualize the results.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
-&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;classic&amp;#39;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we create a function called &lt;code&gt;diceRoll&lt;/code&gt; which generates a random integer between 1 and 6 and returns it to us.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;diceRoll&lt;/span&gt;():
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Next, we initialize a variable that stores the number of desired rolls, run our experiment, and store the results in a list.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;number_of_rolls &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;
-results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
-&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(number_of_rolls):
-    results&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(diceRoll())
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can now visualize our results by plotting them using a &lt;a href=&#34;https://www.investopedia.com/terms/h/histogram.asp&#34;&gt;histogram&lt;/a&gt;.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results, density&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;, bins&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Possible Outcomes&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability of Dice Throw Results&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We choose the number of bins to be 6 because these are our only possible outcomes, and we want to see how often each one appears.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/dicehistogram.svg&#34; alt=&#34;Histogram of dice throw result&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;the-sum-of-two-dice&#34; &gt;The Sum of Two Dice
+&lt;/h2&gt;&lt;p&gt;First we have to import our necessary libraries to generate our random numbers and visualize the results.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; np
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; matplotlib.pyplot &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; plt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;style&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;use(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;classic&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we create a function call diceRoll which will generate a random integer between 1 and 6 and return it to us.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;diceRoll&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;randint(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we initialize a variable that will store the number of desired rolls, run our experiment and store the results in a list.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;number_of_rolls &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(number_of_rolls):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    results&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(diceRoll())
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now we can visualize our results by plotting them using a &lt;a href=&#34;https://www.investopedia.com/terms/h/histogram.asp&#34;&gt;histogram&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results,density&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;,bins &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Possible Outcomes&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability of Dice throw results&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We choose the number of bins to be 6 because these are our only possible outcomes and we are interested to see how often these appear.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/dicehistogram.png&#34; alt=&#34;&amp;ldquo;Histogram of dice throw result&amp;rdquo;&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;the-sum-of-2-dice&#34; &gt;The sum of 2 dice
 &lt;span&gt;
-    &lt;a href=&#34;#the-sum-of-two-dice&#34;&gt;
+    &lt;a href=&#34;#the-sum-of-2-dice&#34;&gt;
         &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
     &lt;/a&gt;
 &lt;/span&gt;
-&lt;/h1&gt;&lt;p&gt;After seeing the results of a single dice throw, it&amp;rsquo;s only natural to consider the probability distribution of the sum of two dice.&lt;/p&gt;
-&lt;p&gt;Let&amp;rsquo;s first examine some of the theory of rolling two dice.&lt;/p&gt;
-&lt;h2 id=&#34;theory-1&#34; &gt;Theory
+&lt;/h1&gt;&lt;p&gt;After seeing the results of a single dice throw, it&amp;rsquo;s only natural to think how would the probability distribution of the sum of two dice.&lt;/p&gt;
+&lt;p&gt;Let&amp;rsquo;s first see some of the theory of two dice throw.&lt;/p&gt;
+&lt;h2 id=&#34;the-theory-1&#34; &gt;The theory
 &lt;span&gt;
-    &lt;a href=&#34;#theory-1&#34;&gt;
+    &lt;a href=&#34;#the-theory-1&#34;&gt;
         &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
     &lt;/a&gt;
 &lt;/span&gt;
-&lt;/h2&gt;&lt;p&gt;All possible combinations of rolling two dice, our sample space, are shown below:&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;All possible combinations of two dice throw, our sample space, is&lt;/p&gt;
 &lt;center&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -472,18 +356,95 @@ plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;/center&gt;
-&lt;p&gt;As we can observe, there are 36 possible combinations of rolls, and each die acts independently of the other. Therefore, to calculate the probability of each pair, we need to multiply the probabilities of the individual outcomes. Since each individual outcome has a probability of 1/6, each pair of outcomes has a probability of 1/36.&lt;/p&gt;
-&lt;p&gt;Now, to determine the probability of the sum of the two dice, we first need to identify all the possible outcomes (sums) and all the possible pairs, so we can add their probabilities.&lt;/p&gt;
-&lt;p&gt;Now we can visualize our results using another histogram.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results,density&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;,bins &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Possible Outcomes&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability of sum of two dice throw results&amp;#34;&lt;/span&gt;)
-plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We choose the number of bins to be 11 to represent the 11 possible outcomes of the sum of two dice throw, which range from 2 to 12.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/2dicehistogram.svg&#34; alt=&#34;&amp;ldquo;Histogram of sum of two dice throw result&amp;rdquo;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;As we can see from the histogram, the probability distribution of the sum of two dice throw follows a bell curve, with the most probable outcome being 7, which is the average of all possible outcomes.&lt;/p&gt;
-&lt;p&gt;In conclusion, we have seen how to simulate a dice throw in Python and how to use basic statistics to check if the probabilities of all sides are equal. We have also explored the probability distribution of the sum of two dice throw, which follows a bell curve. This technique can be extended to simulate more complex random events and can be useful in various fields such as finance, gaming, and scientific research.&lt;/p&gt;
+&lt;p&gt;So as we can see there are 36 possible combinations of rolls and each dice acts independent of the other so to calculate the probability of each pair all we have to do is multiply the probabilities of the individual outcomes and because, as we saw earlier, each individual outcome has a probability of 1/6, each pair of outcomes has a probability of 1/36.&lt;/p&gt;
+&lt;p&gt;Now for the probability of sum of the two dice we first need to find all the possible outcomes (sums) and all the possible pairs so we can add the probabilities.&lt;/p&gt;
+&lt;center&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;Sum&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;Possible pairs&lt;/th&gt;
+&lt;th style=&#34;text-align:center&#34;&gt;Probability&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;4&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;5&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;4&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;4/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;6&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;5&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;5/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;7&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;6&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;6/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;8&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;5&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;5/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;9&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;4&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;4/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;10&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;3/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;11&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;2/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;12&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1&lt;/td&gt;
+&lt;td style=&#34;text-align:center&#34;&gt;1/36&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/center&gt;
+&lt;p&gt;Let&amp;rsquo;s see how we can generate those results and visualize them by reusing the function we wrote for the dice roll.&lt;/p&gt;
+&lt;h2 id=&#34;the-code-1&#34; &gt;The code
+&lt;span&gt;
+    &lt;a href=&#34;#the-code-1&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;p&gt;For these we will use the same function and just call it twice and add the results before we store it to a list. Again we will run this simulation enough times to ensure that we have enough samples to draw a significant conclusion.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;results2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(number_of_rolls):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    results2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(diceRoll()&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;diceRoll())
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then we will just plot the histogram to get a better idea of the results.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hist(results2,density&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;,bins&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;xlabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Possible Outcomes&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ylabel(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;title(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Probability of The Sum of Two Dice&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;plt&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;show()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/2dicehistogram.png&#34; alt=&#34;&amp;ldquo;Histogram of the sum of two dice&amp;rdquo;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;As we can see from the histogram the results of the simulation match the theoretical.&lt;/p&gt;
 &lt;p&gt;The full code for this article can be found at &lt;a href=&#34;https://github.com/NikosAvg/Blog_Codes/blob/main/dice_roll.py&#34;&gt;github&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
