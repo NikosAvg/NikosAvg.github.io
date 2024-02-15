@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+
+
+<html lang="en-us" data-theme="">
+<head>
+    
+        
+<meta charset="utf-8">
+<meta name="HandheldFriendly" content="True">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer-when-downgrade">
+
+<title>Markov Chain Monte Carlo (MCMC) - Nikos Avgoustis</title>
+
+<meta name="description" content="A Basic introduction to Markov Chain Monte Carlo with python.">
+
+
+
+
+
+<link rel="icon" type="image/x-icon" href="https://nikosavg.github.io/favicon.ico">
+<link rel="apple-touch-icon-precomposed" href="https://nikosavg.github.io/favicon.png">
+
+
+
+
+    
+
+
+
+<style>
+  body {
+    visibility: hidden;
+    opacity: 0;
+  }
+</style>
+
+<noscript>
+  <style>
+    body {
+      visibility: visible;
+      opacity: 1;
+    }
+  </style>
+</noscript>
+
+
+
+
+    
+
+
+
+
+
+    
+    
+        
+    
+    
+
+    
+        <link rel="stylesheet" href="https://nikosavg.github.io/css/style.min.a51e8a4e72875cd142d9e27e440570cfa24a380199a8ef21408bc49fa9205c7a.css" integrity="sha256-pR6KTnKHXNFC2eJ&#43;RAVwz6JKOAGZqO8hQIvEn6kgXHo=">
+    
+
+
+
+
+
+    
+
+    
+
+
+
+
+
+    
+    
+        
+    
+    
+
+    
+        <script src="https://nikosavg.github.io/js/script.min.74bf1a3fcf1af396efa4acf3e660e876b61a2153ab9cbe1893ac24ea6d4f94ee.js" type="text/javascript" charset="utf-8" integrity="sha256-dL8aP88a85bvpKzz5mDodrYaIVOrnL4Yk6wk6m1PlO4="></script>
+    
+
+
+
+
+
+
+
+<meta property="og:title" content="Markov Chain Monte Carlo (MCMC)" />
+<meta property="og:description" content="A Basic introduction to Markov Chain Monte Carlo with python." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://nikosavg.github.io/posts/mcmc/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-02-12T11:26:04+02:00" />
+<meta property="article:modified_time" content="2024-02-12T11:26:04+02:00" />
+
+
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Markov Chain Monte Carlo (MCMC)"/>
+<meta name="twitter:description" content="A Basic introduction to Markov Chain Monte Carlo with python."/>
+
+
+
+
+
+
+
+
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JGMV3N6C4M"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-JGMV3N6C4M', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+
+
+
+
+    
+</head>
+<body>
+    <a class="skip-main" href="#main">Skip to main content</a>
+    <div class="container">
+        <header class="common-header"> 
+            
+                <div class="header-top">
+    <div class="header-top-left">
+        <h1 class="site-title">
+    <a href="/">Nikos Avgoustis</a>
+</h1>
+        <ul class="social-icons">
+
+
+    
+        
+        
+        <li>
+            <a href="https://github.com/NikosAvg" title="Github" rel="me">
+            <span class="inline-svg" >
+
+
+
+
+    
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+</span>
+
+            </a>
+        </li>
+    
+
+    
+        <li>
+            <a href="https://www.linkedin.com/in/nikolaos-avgoustis/" title="Linkedin" rel="me">
+            <span class="inline-svg" >
+
+
+
+
+    
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+
+</span>
+
+            </a>
+        </li>
+    
+
+
+
+
+</ul>
+    </div>
+    <div class="header-top-right">
+        
+
+    
+
+
+
+
+    <div class="theme-switcher">
+        <span class="inline-svg" >
+
+
+
+
+    
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 290 290">
+<path fill="currentColor" d="M142.959,0C64.131,0,0,64.132,0,142.96c0,78.828,64.131,142.959,142.959,142.959c78.828,0,142.96-64.131,142.96-142.959  C285.919,64.132,221.787,0,142.959,0z M142.959,260.919V142.96V25c65.043,0,117.96,52.917,117.96,117.96  C260.919,208.003,208.002,260.919,142.959,260.919z"/>
+</svg>
+
+</span>
+
+    </div>
+
+
+<script>
+const STORAGE_KEY = 'user-color-scheme'
+const defaultTheme = "light"
+
+let currentTheme
+let switchButton
+let autoDefinedScheme = window.matchMedia('(prefers-color-scheme: dark)')
+
+const autoChangeScheme = e => {
+    currentTheme = e.matches ? 'dark' : 'light'
+    document.documentElement.setAttribute('data-theme', currentTheme)
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    switchButton = document.querySelector('.theme-switcher')
+    currentTheme = detectCurrentScheme()
+    if (currentTheme == 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark')
+    }
+    if (currentTheme == 'auto') {
+        autoChangeScheme(autoDefinedScheme);
+        autoDefinedScheme.addListener(autoChangeScheme);
+    }
+
+    if (switchButton) {
+        switchButton.addEventListener('click', switchTheme, false)
+    }
+  
+    showContent()
+})
+
+function detectCurrentScheme() {
+    if (localStorage !== null && localStorage.getItem(STORAGE_KEY)) {
+        return localStorage.getItem(STORAGE_KEY)
+    } 
+    if (defaultTheme) {
+        return defaultTheme
+    } 
+    if (!window.matchMedia) {
+        return 'light'
+    } 
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        return 'dark'
+    }
+    return 'light'
+}
+
+function switchTheme(e) {
+    if (currentTheme == 'dark') {
+        if (localStorage !== null)
+            localStorage.setItem(STORAGE_KEY, 'light')
+        document.documentElement.setAttribute('data-theme', 'light')
+        currentTheme = 'light'
+    } else {
+        if (localStorage !== null)
+            localStorage.setItem(STORAGE_KEY, 'dark')
+        document.documentElement.setAttribute('data-theme', 'dark')
+        currentTheme = 'dark'
+    }
+}
+
+function showContent() {
+    document.body.style.visibility = 'visible';
+    document.body.style.opacity = 1;
+}
+</script>
+
+  
+    </div>
+</div>
+
+
+    <nav>
+        
+        
+        <a class="" href="https://nikosavg.github.io/about/" title="">About</a>
+        
+        <a class="" href="https://nikosavg.github.io/posts/" title="">Posts</a>
+        
+        <a class="" href="https://nikosavg.github.io/portfolio/" title="">Portfolio</a>
+        
+    </nav>
+
+
+
+
+
+            
+        </header>
+        <main id="main" tabindex="-1"> 
+            
+    
+
+    <article class="post h-entry">
+        <div class="post-header">
+            <header>
+                <h1 class="p-name post-title">Markov Chain Monte Carlo (MCMC)</h1>
+
+                
+            </header>
+        </div>
+        
+
+
+
+
+        <div class="content e-content">
+            <p>Markov Chain Monte Carlo (MCMC) is a computational technique used to approximate complex probability distributions. It works by constructing a Markov chain that has the desired distribution as its equilibrium distribution. By running this Markov chain for a sufficiently long time, samples drawn from it can be used to approximate the target distribution.</p>
+<p>One of the algorithms that are used to implement a Markov Chain Monte Carlo is the Metropolis-Hastings algorithm.
+The Metropolis-Hastings algorithm is a Markov Chain Monte Carlo (MCMC) method used for sampling from a probability distribution, especially when direct sampling is difficult. Here&rsquo;s a breakdown of the algorithm:</p>
+<ol>
+<li>
+<p>Initialization: Start with an initial state for the Markov chain.</p>
+</li>
+<li>
+<p>Proposal: Propose a new state from a proposal distribution. This distribution suggests where to move next in the state space.</p>
+</li>
+<li>
+<p>Acceptance/Rejection: Calculate an acceptance probability based on the ratio of the target distribution at the proposed state and the current state, adjusted by the proposal distribution. This ratio represents the likelihood of moving from the current state to the proposed state.</p>
+<ol>
+<li>If the proposed state has a higher probability according to the target distribution, accept it with probability 1.</li>
+<li>If the proposed state has a lower probability, accept it with probability equal to the ratio of probabilities.</li>
+</ol>
+</li>
+<li>
+<p>Update: Move to the proposed state based on the acceptance probability. If rejected, stay in the current state.</p>
+</li>
+<li>
+<p>Repeat: Repeat steps 2-4 for a predetermined number of iterations or until convergence is achieved.</p>
+</li>
+</ol>
+<p>The key idea behind Metropolis-Hastings is that even though it&rsquo;s only a random walk in the state space, the ratio of the target distribution&rsquo;s probabilities ensures that the samples generated will eventually converge to the desired distribution.</p>
+<p>The Metropolis-Hastings algorithm ensures that the Markov chain generated converges to the desired distribution regardless of the choice of the proposal distribution, as long as it satisfies certain conditions.</p>
+<p>Here&rsquo;s a simple example of using MCMC, specifically the Metropolis-Hastings algorithm, to sample from a normal distribution:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Target distribution (normal distribution)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">target_distribution</span>(x, mu, sigma):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>exp(<span style="color:#f92672">-</span><span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> ((x <span style="color:#f92672">-</span> mu) <span style="color:#f92672">/</span> sigma)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">/</span> (np<span style="color:#f92672">.</span>sqrt(<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>pi) <span style="color:#f92672">*</span> sigma)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Proposal distribution (normal distribution for simplicity)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">proposal_distribution</span>(x, sigma_proposal):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(x, sigma_proposal)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Metropolis-Hastings algorithm</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">metropolis_hastings</span>(num_samples, mu, sigma, sigma_proposal, initial_state<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>    samples <span style="color:#f92672">=</span> [initial_state]
+</span></span><span style="display:flex;"><span>    accepted <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(num_samples):
+</span></span><span style="display:flex;"><span>        current_state <span style="color:#f92672">=</span> samples[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>        proposed_state <span style="color:#f92672">=</span> proposal_distribution(current_state, sigma_proposal)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Calculate acceptance probability</span>
+</span></span><span style="display:flex;"><span>        acceptance_prob <span style="color:#f92672">=</span> min(<span style="color:#ae81ff">1</span>, target_distribution(proposed_state, mu, sigma) <span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>                                      target_distribution(current_state, mu, sigma))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Accept or reject proposal</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand() <span style="color:#f92672">&lt;</span> acceptance_prob:
+</span></span><span style="display:flex;"><span>            samples<span style="color:#f92672">.</span>append(proposed_state)
+</span></span><span style="display:flex;"><span>            accepted <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            samples<span style="color:#f92672">.</span>append(current_state)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    acceptance_rate <span style="color:#f92672">=</span> accepted <span style="color:#f92672">/</span> num_samples
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> samples, acceptance_rate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Parameters</span>
+</span></span><span style="display:flex;"><span>num_samples <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>
+</span></span><span style="display:flex;"><span>mu <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>sigma <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>sigma_proposal <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Run Metropolis-Hastings algorithm</span>
+</span></span><span style="display:flex;"><span>samples, acceptance_rate <span style="color:#f92672">=</span> metropolis_hastings(num_samples, mu, sigma, sigma_proposal)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Plot histogram of samples</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>hist(samples, bins<span style="color:#f92672">=</span><span style="color:#ae81ff">50</span>, density<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;b&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;MCMC samples&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(np<span style="color:#f92672">.</span>linspace(<span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">1000</span>), target_distribution(np<span style="color:#f92672">.</span>linspace(<span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">1000</span>), mu, sigma),
+</span></span><span style="display:flex;"><span>         color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;r&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;True distribution&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;MCMC Sampling vs True Distribution&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;x&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Density&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend()
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Acceptance rate: </span><span style="color:#e6db74">{</span>acceptance_rate<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span></code></pre></div><p>This code generates samples from a normal distribution using the Metropolis-Hastings algorithm and plots the resulting distribution along with the true distribution.</p>
+<p><img src="/images/mcmc.png" alt="image info"></p>
+
+        </div>
+        
+
+    
+
+
+
+<div class="post-info">
+    
+        <div class="post-date dt-published">
+            <a class="u-url" href="/posts/mcmc/"><time datetime="2024-02-12">12-02-2024</time></a>
+            
+        </div>
+    
+
+    <a class="post-hidden-url u-url" href="https://nikosavg.github.io/posts/mcmc/">https://nikosavg.github.io/posts/mcmc/</a>
+    <a href="https://nikosavg.github.io/" class="p-name p-author post-hidden-author h-card" rel="me">Nikos Avgoustis</a>
+
+
+    <div class="post-taxonomies">
+        
+        
+            <ul class="post-tags">
+                
+                    
+                    <li><a href="https://nikosavg.github.io/tags/montecarlo/">#MonteCarlo</a></li>
+                
+                    
+                    <li><a href="https://nikosavg.github.io/tags/python/">#Python</a></li>
+                
+                    
+                    <li><a href="https://nikosavg.github.io/tags/simulation/">#Simulation</a></li>
+                
+                    
+                    <li><a href="https://nikosavg.github.io/tags/probability/">#Probability</a></li>
+                
+                    
+                    <li><a href="https://nikosavg.github.io/tags/statistics/">#Statistics</a></li>
+                
+            </ul>
+        
+        
+    </div>
+</div>
+
+    </article>
+
+    
+        
+        
+            <h3 class="read-next-title">Read next</h3>
+            <ul class="read-next-posts">
+                
+                <li><a href="/posts/montecarlosimulation/">Monte Carlo simulations with Python</a></li>
+                
+                <li><a href="/posts/montecarlointegration/">Monte Carlo Integration in Python</a></li>
+                
+                <li><a href="/posts/dicesimulation/">Dice Simulation in Python</a></li>
+                
+                <li><a href="/posts/2drandomwalkwithpython/">2D Random Walk With Python</a></li>
+                
+                <li><a href="/posts/randomwalkwithpython/">Random Walk in Python</a></li>
+                
+            </ul>
+        
+    
+
+    
+        
+    
+    
+    <div class="pagination post-pagination">
+        <div class="left pagination-item disabled">
+            
+        </div>
+        <div class="right pagination-item ">
+            
+                <a href="/posts/linearregression/">Linear Regression from scratch in Python.</a>
+            
+        </div>
+    </div>
+
+
+
+
+    
+
+    
+        
+
+
+
+
+
+
+
+
+    
+
+        </main>
+        
+            <footer class="common-footer">
+    
+    
+
+    <div class="common-footer-bottom">
+        
+        <div class="copyright">
+            <p>© Nikos Avgoustis, 2024<br>
+            Powered by <a target="_blank" rel="noopener noreferrer" href="https://gohugo.io/">Hugo</a>, theme <a target="_blank" rel="noopener noreferrer" href="https://github.com/mitrichius/hugo-theme-anubis">Anubis</a>.<br>
+            
+            </p>  
+        </div> 
+    </div>
+
+    <p class="h-card vcard">
+
+    <a href=https://nikosavg.github.io/ class="p-name u-url url fn" rel="me">Nikos Avgoustis</a> 
+
+    
+
+    
+</p> 
+</footer>
+
+        
+    </div>
+</body>
+</html>
