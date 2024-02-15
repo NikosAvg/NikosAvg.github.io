@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>portfolio on Nikos Avgoustis</title>
+    <link>https://nikosavg.github.io/tags/portfolio/</link>
+    <description>Nikos Avgoustis (portfolio)</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+    <atom:link href="https://nikosavg.github.io/tags/portfolio/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Reddit Sentiment Analysis Dashboard</title>
+      <link>https://nikosavg.github.io/reddit_sent/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://nikosavg.github.io/reddit_sent/</guid>
+      <description>&lt;p&gt;Welcome to the Reddit Sentiment Analysis Dashboard! This interactive dashboard provides a comprehensive analysis of sentiments expressed in Reddit posts related to cryptocurrency, coupled with the corresponding price trends.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://nikosavg.github.io/images/reddit_sent.jpg&#34; alt=&#34;image info&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;features&#34; &gt;Features
+&lt;span&gt;
+    &lt;a href=&#34;#features&#34;&gt;
+        &lt;svg viewBox=&#34;0 0 28 23&#34; height=&#34;100%&#34; width=&#34;19&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34;&gt;&lt;path d=&#34;M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;path d=&#34;M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71&#34; fill=&#34;none&#34; stroke-linecap=&#34;round&#34; stroke-miterlimit=&#34;10&#34; stroke-width=&#34;2&#34;/&gt;&lt;/svg&gt;
+    &lt;/a&gt;
+&lt;/span&gt;
+&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;Sentiment and Price Over Days: Track the sentiment scores of Reddit posts alongside cryptocurrency price movements over time.&lt;/li&gt;
+&lt;li&gt;Number of Posts per Day: Visualize the volume of Reddit posts on a daily basis.&lt;/li&gt;
+&lt;li&gt;Sentiment Distribution: Explore the distribution of sentiments among Reddit posts, categorized as Positive, Negative, or Neutral.&lt;/li&gt;
+&lt;li&gt;Top Posts Sentiment: Discover the sentiment analysis of the top-rated Reddit posts, including their titles, upvotes, and sentiment scores.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;To view the project live visit &lt;a href=&#34;https://reddit-sent.onrender.com/&#34;&gt;reddit-sent.onrender.com&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
