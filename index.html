@@ -23,6 +23,18 @@
                 max-width: 1200px;
                 margin: auto;
             }
+            .social-links {
+                margin-top: 15px;
+            }
+            .social-links a {
+                margin: 0 8px;
+                color: var(--primary);
+                font-size: 1.4rem;
+                transition: color 0.3s ease;
+            }
+            .social-links a:hover {
+                color: #1d4ed8;
+            }
             .sidebar {
                 max-width: 280px;
                 text-align: center;
@@ -88,16 +100,26 @@
                     Ph.D. Candidate at Ionian University | Python Specialist |
                     Data Analyst
                 </p>
-                <p>
-                    <a href="https://www.linkedin.com/in/nikolaos-avgoustis/">
-                        Linkedin </a
-                    >| <a href="https://github.com/NikosAvg"> Github </a> |
+                <div class="social-links">
                     <a
-                        href="https://www.researchgate.net/profile/Nikolaos-Augoustis"
-                    >
-                        Research Gate
-                    </a>
-                </p>
+                        href="https://github.com/NikosAvg"
+                        target="_blank"
+                        aria-label="GitHub"
+                        ><i class="fab fa-github"></i
+                    ></a>
+                    <a
+                        href="https://www.linkedin.com/in/nikolaosavgoustis"
+                        target="_blank"
+                        aria-label="LinkedIn"
+                        ><i class="fab fa-linkedin"></i
+                    ></a>
+                    <a
+                        href="https://www.researchgate.net/profile/Nikolaos-Avgoustis"
+                        target="_blank"
+                        aria-label="ResearchGate"
+                        ><i class="fab fa-researchgate"></i
+                    ></a>
+                </div>
             </aside>
 
             <div></div>
