@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Nikolaos Avgoustis | Portfolio</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+
+        <style>
+            .main-layout {
+                display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: center;
+                gap: 40px;
+                padding: 40px;
+                max-width: 1200px;
+                margin: auto;
+            }
+            .sidebar {
+                max-width: 280px;
+                text-align: center;
+            }
+            .sidebar img {
+                width: 100%;
+                border-radius: 50%;
+                border: 3px solid var(--primary);
+            }
+            .sidebar h1 {
+                margin-top: 15px;
+                font-size: 1.5rem;
+            }
+            .sidebar p {
+                font-size: 0.95rem;
+                color: #555;
+            }
+            .content section {
+                margin-bottom: 40px;
+            }
+            .content ul {
+                padding-left: 20px;
+            }
+            .sub-projects {
+                list-style-type: disc;
+                padding-left: 20px;
+                margin-top: 10px;
+            }
+            .sub-projects li {
+                margin-bottom: 6px;
+                font-size: 0.95rem;
+            }
+        </style>
+    </head>
+    <body>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="publications.html">Publications</a></li>
+                <li><a href="projects.html">Projects</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-layout fade-in">
+            <aside class="sidebar">
+                <img src="images/profile.jpg" alt="Nikolaos Avgoustis" />
+                <h1>Nikolaos Avgoustis</h1>
+                <p>
+                    Ph.D. Candidate at Ionian University | Python Specialist |
+                    Data Analyst
+                </p>
+                <p></p>
+            </aside>
+            <div></div>
+            <div class="content">
+                <section>
+                    <h2>Education</h2>
+                    <ul>
+                        <li>
+                            <strong>PhD in Informatics</strong> – Ionian
+                            University 2022 - Present
+                        </li>
+                        <li>
+                            <strong>MSc Informatics </strong> – Ionian
+                            University 2019 - 2021
+                        </li>
+                        <li>
+                            <strong>BSc Mathematics </strong> – University of
+                            Ioannina 2013 - 2018
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="timeline-section fade-in">
+                    <h2>Work Experience</h2>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h3>
+                                    Scientific Researcher – Ionian University
+                                </h3>
+                                <span class="timeline-date"
+                                    >2018 – Present</span
+                                >
+                                <p>
+                                    Contributed to multiple research and
+                                    innovation projects involving AI, sensors,
+                                    and environmental systems:
+                                </p>
+
+                                <ul class="sub-projects">
+                                    <li>
+                                        <strong>LAERTIS:</strong> Natural hazard
+                                        management system for the Ionian
+                                        Islands.
+                                    </li>
+                                    <li>
+                                        <strong>BEST:</strong> Biodiversity
+                                        modeling, microclimate mapping, and
+                                        invasive species simulation.
+                                    </li>
+                                    <li>
+                                        <strong>SAVE WATER:</strong> Smart water
+                                        infrastructure analysis and database
+                                        integration.
+                                    </li>
+                                    <li>
+                                        <strong>TELEMAXOS:</strong> ML-driven
+                                        decision system for seismic risk
+                                        estimation.
+                                    </li>
+                                    <li>
+                                        <strong
+                                            >Stochastic Data Analysis
+                                            Toolkit:</strong
+                                        >
+                                        Created for university lectures in
+                                        Python.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h3>Teaching Assistant – Ionian University</h3>
+                                <span class="timeline-date"
+                                    >2021 – Present</span
+                                >
+                                <p>
+                                    Supported lab and teaching sessions, student
+                                    mentoring.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 Nikolaos Avgoustis</p>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>
